@@ -1,0 +1,26 @@
+header {
+  position: fixed;
+  top: 1em;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+header div {
+  width: 200px;
+}
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+.container .area {
+  width: 45%;
+  padding: 1em;
+  border: 1px solid gold;
+}
+#pastePanel {
+  width: 100%;
+  min-height: 60vh;
+  resize: none;
+}
+
