@@ -6,7 +6,8 @@
     "scripts": {
         "dev": "webpack-dev-server --config=webpack.config.js",
         "build": "webpack --config=webpack.config.build.js",
-        "dev:dist": "webpack --config=webpack.config.js"
+        "dev:dist": "webpack --config=webpack.config.js",
+        "deployServer": "npm run build && ./deployServer.sh"
     },
     "keywords": [],
     "author": "ATQQ",

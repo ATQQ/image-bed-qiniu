@@ -1,26 +1,85 @@
+h2 {
+  text-align: center;
+}
 header {
+  box-sizing: border-box;
   position: fixed;
   top: 1em;
   left: 0;
   width: 100%;
-  display: flex;
-  justify-content: center;
+  padding: 10px;
 }
 header div {
   width: 200px;
 }
 .container {
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  padding: 10px;
 }
 .container .area {
-  width: 45%;
-  padding: 1em;
-  border: 1px solid gold;
+  width: 100%;
+}
+.container .result-area ol li a {
+  display: inline-block;
+  min-width: 50%;
+}
+.container .result-area ol li button {
+  line-height: 1em;
+  cursor: pointer;
+  margin: 0 10px 0 0;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  font-weight: bold;
+}
+.container .result-area ol li button:hover {
+  transition: all 0.1s linear;
+  color: black;
+  transform: scale(2);
+}
+.container .result-area ol li .link {
+  color: blue;
+}
+.container .result-area ol li .md {
+  color: green;
+}
+.container .result-area ol li .delete {
+  color: red;
 }
 #pastePanel {
   width: 100%;
-  min-height: 60vh;
+  min-height: 100px;
   resize: none;
+}
+
+.toast {
+  position: fixed;
+  text-align: center;
+  box-sizing: border-box;
+  left: 0;
+  width: 100%;
+  top: 10%;
+}
+.toast span {
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+.toast-success span {
+  background-color: #f0f9eb;
+  color: #67C23A;
+}
+.toast-error span {
+  background-color: #fef0f0;
+  color: #F56C6C;
+}
+.toast-warn span {
+  background-color: #fdf6ec;
+  color: #E6A23C;
+}
+.toast-info span {
+  background-color: #ecf5ff;
+  color: #409EFF;
 }
 

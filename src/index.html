@@ -9,19 +9,30 @@
 </head>
 
 <body>
-
-    <header>
+    <!-- <header>
         <div id="upload-process">上传进度:0</div>
-    </header>
+    </header> -->
     <div class="container">
-        <div class="area">
-            <h1>粘贴图片:</h1>
+
+        <!-- <div class="toast toast-info">
+            <span>复制成功</span>
+        </div> -->
+
+        <div class="area paste-area">
+            <h2>粘贴图片</h2>
             <textarea draggable="true" id="pastePanel" placeholder="请在此区域粘贴或拖拽图片文件"></textarea>
         </div>
-        <div class="area" id="right-area">
-            <h1>结果</h1>
+        <div class="area result-area" id="result-area">
+            <h2>结果</h2>
             <ol>
-                <!-- <li><img src="https://www.baidu.com/img/baidu_jgylogo3.gif" alt=""></li> -->
+                <li>
+                    <a target="_blank" href="http://img.cdn.sugarat.top/mdImg/MTU3OTM2ODc3OTM4Nw==579368779387">http://img.cdn.sugarat.top/mdImg/MTU3OTM2ODc3OTM4Nw==579368779387</a>
+                    <span>
+                        <button class="link" title="复制地址">地址</button>
+                        <button class="md" title="复制markdown格式">md</button>  
+                        <button class="delete" title="删除">X</button>
+                    </span>
+                </li>
             </ol>
         </div>
     </div>

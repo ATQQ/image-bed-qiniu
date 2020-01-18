@@ -1,3 +1,5 @@
+import { copyRes } from "./tool"
+
 /**
  * 获取超链接的a标签
  * @param {String} url 
@@ -6,21 +8,33 @@ function getLinkDom(url) {
     let a = document.createElement('a');
     a.href = url;
     a.target = '_blank';
-    a.textContent = `![图片](${url})`
+    a.textContent = url
     copyRes(`![图片](${url})`);
     return a;
 }
 
 /**
  * 将图片链接回显到屏幕上
- * @param {Element} a 
+ * @param {Element} href 
  */
-function appendLink(a) {
-    let rightArea = document.getElementById('right-area');
-    let li = document.createElement('li');
-    let ol = rightArea.querySelector('ol');
-    li.appendChild(a);
+function appendLink(href) {
+    let html = `
+    <li>
+        <a href="${href}" target="_blank">${href}</a>
+        <span>
+            <button class="link" title="复制地址">地址</button>
+            <button class="md" title="复制markdown格式">md</button>  
+             <button class="delete" title="删除">X</button>
+        </span>
+    </li>
+    `
+    let temp = document.createElement('div');
+    temp.innerHTML = html
+    let resultArea = document.getElementById('result-area');
+    let li = temp.children[0]
+    let ol = resultArea.querySelector('ol');
     ol.appendChild(li);
+    copyRes(`![图片](${href})`);
 }
 
 /**
@@ -28,7 +42,7 @@ function appendLink(a) {
  * @param {String} url 
  */
 function addLink(url) {
-    appendLink(getLinkDom(url))
+    appendLink(url)
 }
 
 /**
@@ -40,21 +54,6 @@ function updateUploadProcess(value) {
     uploadProcess.textContent = `上传进度:${value.toFixed(2)}`;
 }
 
-/**
- * 将结果写入的剪贴板
- * @param {String} text 
- */
-function copyRes(text) {
-    const input = document.createElement('input');
-    document.body.appendChild(input);
-    input.setAttribute('value', text);
-    input.select();
-    if (document.execCommand('copy')) {
-        document.execCommand('copy');
-    }
-    document.body.removeChild(input);
-    alert("结果已成功复制到剪贴板")
-}
 
 export {
     addLink,

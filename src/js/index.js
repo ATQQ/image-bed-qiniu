@@ -1,8 +1,14 @@
 import "../less/index.less"
 import { uploadFile } from "./../utils/qiniuUtil.js";
+import { copyRes } from "./../utils/tool"
+import { toast } from "./../components/Toast/index"
 console.log("init success")
 
+// 粘贴板
 let pastePanel = document.getElementById('pastePanel');
+
+// 结果面板
+let resultPanel = document.getElementById('result-area');
 
 /**
  * 监听粘贴事件
@@ -28,7 +34,7 @@ pastePanel.addEventListener('paste', function(e) {
             });
         }
     }
-    alert("剪贴板中没有图片")
+    toast.error("剪贴板中没有图片")
 })
 
 // 禁用默认的拖拽触发的内容
@@ -41,8 +47,9 @@ document.addEventListener('dragover', function(e) {
 
 
 
-//监听文件拖拽上传
-
+/**
+ * 监听文件拖拽上传事件
+ */
 let drag = false;
 
 pastePanel.addEventListener('dragenter', function(e) {
@@ -69,6 +76,36 @@ pastePanel.addEventListener('drop', function(e) {
                 return;
             }
         }
-        alert("没有图片文件")
+        toast.error("没有图片文件")
+    }
+})
+
+/**
+ * 监听结果面板中的点击事件
+ */
+resultPanel.addEventListener('click', function(e) {
+    let { target } = e;
+    let { className } = target;
+    let options = ['link', 'md', 'delete'];
+    let flag = options.indexOf(className);
+    if (flag >= 0) {
+        let $a = target.parentElement.previousElementSibling;
+        let $li = $a.parentElement;
+        let { href } = $a;
+        switch (flag) {
+            case 0: //链接
+                copyRes(href);
+                break;
+            case 1: // markdown链接
+                copyRes(`![图片](${href})`)
+                break;
+            case 2: // 删除
+                if (confirm("确认从图床中删除此图片?")) {
+                    toast.info("开发构思中")
+                }
+                break;
+            default:
+                break;
+        }
     }
 })

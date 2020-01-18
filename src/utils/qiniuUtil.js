@@ -1,17 +1,18 @@
 import * as qiniu from "qiniu-js";
 import { config, token, Domain } from './../config/qiniu.config.js';
 import { addLink, updateUploadProcess } from './viewUtil'
-
+import { toast } from "./../components/Toast/index"
 let observer = {
     next(res) {
         console.log(res);
         //上传进度
         let { percent } = res.total;
-        console.log(`上传:${percent}`);
-        updateUploadProcess(percent);
+        toast.info(`上传:${percent}`)
+            // updateUploadProcess(percent);
     },
     error(err) {
         console.log(err);
+        toast.error(err.message)
     },
     complete(res) {
         let { key } = res;
