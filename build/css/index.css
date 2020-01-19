@@ -52,6 +52,9 @@ header div {
   min-height: 100px;
   resize: none;
 }
+#pastePanel::placeholder {
+  color: red;
+}
 
 .toast {
   position: fixed;
