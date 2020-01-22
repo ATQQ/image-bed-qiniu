@@ -110,6 +110,7 @@ let options = {
 node token.js
 ```
 同级目录下生成token.txt文件
+
 ![图片](http://img.cdn.sugarat.top/mdImg/MTU3Nzc2MjcyMTM3MQ==577762721371)
 
 4. 修改 src/config/qiniu.config.js中的七牛云配置文件

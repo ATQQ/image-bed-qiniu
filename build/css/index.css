@@ -23,6 +23,7 @@ header div {
 .container .result-area ol li a {
   display: inline-block;
   min-width: 50%;
+  word-break: break-all;
 }
 .container .result-area ol li button {
   line-height: 1em;
@@ -40,6 +41,7 @@ header div {
 }
 .container .result-area ol li .link {
   color: blue;
+  word-break: break-all;
 }
 .container .result-area ol li .md {
   color: green;
