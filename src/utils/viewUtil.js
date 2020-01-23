@@ -38,7 +38,7 @@ function appendLink(href) {
 }
 
 /**
- * 回显上传的图片
+ * 回显上传的相关图片地址
  * @param {String} url 
  */
 function addLink(url) {

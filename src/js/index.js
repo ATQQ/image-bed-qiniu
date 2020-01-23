@@ -10,6 +10,9 @@ let pastePanel = document.getElementById('pastePanel');
 // 结果面板
 let resultPanel = document.getElementById('result-area');
 
+// 选择文件上传按钮
+let uploadBtn = document.getElementById('file-picker')
+
 /**
  * 监听粘贴事件
  */
@@ -85,6 +88,7 @@ pastePanel.addEventListener('drop', function(e) {
  */
 resultPanel.addEventListener('click', function(e) {
     let { target } = e;
+    let $a = target.parentElement.previousElementSibling;
     let { className } = target;
     let options = ['link', 'md', 'delete'];
     let flag = options.indexOf(className);
@@ -95,9 +99,11 @@ resultPanel.addEventListener('click', function(e) {
         switch (flag) {
             case 0: //链接
                 copyRes(href);
+                $a.text = href
                 break;
             case 1: // markdown链接
                 copyRes(`![图片](${href})`)
+                $a.text = `![图片](${href})`
                 break;
             case 2: // 删除
                 if (confirm("确认从图床中删除此图片?")) {
@@ -108,4 +114,20 @@ resultPanel.addEventListener('click', function(e) {
                 break;
         }
     }
+})
+
+/**
+ * 当改变文件选择时触发
+ */
+uploadBtn.addEventListener('change', function() {
+    let files = this.files
+    if (files.length === 0) {
+        return;
+    }
+    let file = files[0]
+
+    //文件名(加一个前缀相当于目录)
+    let fileName = 'mdImg/' + btoa(Date.now()) + file.name;
+    //开始上传
+    uploadFile(file, fileName);
 })
