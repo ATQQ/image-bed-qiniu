@@ -103,17 +103,7 @@ let options = {
 <img src="http://img.cdn.sugarat.top/mdImg/MTU3Nzc2MjU5ODU4NQ==577762598585">
 </details> 
 
-
-3. 修改完成后运行token.js
-
-```npm
-node token.js
-```
-同级目录下生成token.txt文件
-
-![图片](http://img.cdn.sugarat.top/mdImg/MTU3Nzc2MjcyMTM3MQ==577762721371)
-
-4. 修改 src/config/qiniu.config.js中的七牛云配置文件
+3. 修改 token.js中的七牛云配置文件
 
 ```js
 //...code
@@ -132,7 +122,7 @@ let Domain = 'xxxx';
 
 > [qiniu-JavaScript-sdk文档](https://developer.qiniu.com/kodo/sdk/1283/javascript)
 
-5. 上述修改完毕后就可以启动运行了
+4. 上述修改完毕后就可以启动运行了
 
 ```npm
 # 开发环境直接运行

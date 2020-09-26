@@ -2,6 +2,8 @@ import "../less/index.less"
 import { uploadFile } from "./../utils/qiniuUtil.js";
 import { copyRes } from "./../utils/tool"
 import { toast } from "./../components/Toast/index"
+import { date } from './../config/qiniu.config'
+
 console.log("init success")
 
 // 粘贴板
@@ -16,7 +18,7 @@ let uploadBtn = document.getElementById('file-picker')
 /**
  * 监听粘贴事件
  */
-pastePanel.addEventListener('paste', function(e) {
+pastePanel.addEventListener('paste', function (e) {
     console.log('paste');
     // 阻止触发默认的粘贴事件
     e.preventDefault();
@@ -41,10 +43,10 @@ pastePanel.addEventListener('paste', function(e) {
 })
 
 // 禁用默认的拖拽触发的内容
-document.addEventListener('drop', function(e) {
+document.addEventListener('drop', function (e) {
     e.preventDefault()
 }, true)
-document.addEventListener('dragover', function(e) {
+document.addEventListener('dragover', function (e) {
     e.preventDefault()
 }, true)
 
@@ -55,19 +57,19 @@ document.addEventListener('dragover', function(e) {
  */
 let drag = false;
 
-pastePanel.addEventListener('dragenter', function(e) {
+pastePanel.addEventListener('dragenter', function (e) {
     drag = true;
 })
 
-pastePanel.addEventListener('dragover', function(e) {
+pastePanel.addEventListener('dragover', function (e) {
     drag = true;
 });
 
-pastePanel.addEventListener('dragleave', function(e) {
+pastePanel.addEventListener('dragleave', function (e) {
     drag = false;
 })
 
-pastePanel.addEventListener('drop', function(e) {
+pastePanel.addEventListener('drop', function (e) {
     if (drag) {
         let { files } = e.dataTransfer;
         for (const file of files) {
@@ -86,7 +88,7 @@ pastePanel.addEventListener('drop', function(e) {
 /**
  * 监听结果面板中的点击事件
  */
-resultPanel.addEventListener('click', function(e) {
+resultPanel.addEventListener('click', function (e) {
     let { target } = e;
     let $a = target.parentElement.previousElementSibling;
     let { className } = target;
@@ -119,7 +121,7 @@ resultPanel.addEventListener('click', function(e) {
 /**
  * 当改变文件选择时触发
  */
-uploadBtn.addEventListener('change', function() {
+uploadBtn.addEventListener('change', function () {
     let files = this.files
     if (files.length === 0) {
         return;
@@ -131,3 +133,39 @@ uploadBtn.addEventListener('change', function() {
     //开始上传
     uploadFile(file, fileName);
 })
+
+function refreshDDL() {
+    document.getElementById('ddl').textContent = new Date(date).Format('yyyy-MM-dd hh:mm:ss')
+
+    const refreshWait = () => {
+        let wait = ((date - Date.now()) / 1000) >> 0
+        const day = (wait / (24 * 60 * 60)) >> 0
+        wait -= day * 24 * 60 * 60
+        const hour = (wait / (60 * 60)) >> 0
+        wait -= hour * 60 * 60
+        document.getElementById('wait').textContent = `${day}天 ${hour}时 ${wait} 秒`
+        requestAnimationFrame(refreshWait)
+    }
+    refreshWait()
+}
+
+//对Date进行扩展
+Date.prototype.Format = function (fmt) { //author: meizz
+    const o = {
+        'M+': this.getMonth() + 1, //月份
+        'd+': this.getDate(), //日
+        'h+': this.getHours(), //小时
+        'm+': this.getMinutes(), //分
+        's+': this.getSeconds(), //秒
+        'q+': Math.floor((this.getMonth() + 3) / 3), //季度
+        'S': this.getMilliseconds() //毫秒
+    }
+    if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + '').substr(4 - RegExp.$1.length))
+    for (const k in o)
+        if (new RegExp('(' + k + ')').test(fmt))
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+    return fmt
+}
+
+refreshDDL()

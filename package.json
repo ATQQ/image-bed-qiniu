@@ -4,8 +4,8 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "webpack-dev-server --config=webpack.config.js",
-        "build": "rm -rf build && webpack --config=webpack.config.build.js",
+        "dev": "node token.js && webpack-dev-server --config=webpack.config.js",
+        "build": "node token.js && rm -rf build && webpack --config=webpack.config.build.js",
         "dev:dist": "webpack --config=webpack.config.js",
         "deployServer": "npm run build && ./deployServer.sh"
     },
