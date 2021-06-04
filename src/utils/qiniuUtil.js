@@ -1,6 +1,6 @@
 import * as qiniu from "qiniu-js";
-import { config, token, Domain } from './../config/qiniu.config.js';
-import { addLink, updateUploadProcess } from './viewUtil'
+import { config, token, domain } from './../config/qiniu.config.js';
+import { addLink } from './viewUtil'
 import { toast } from "./../components/Toast/index"
 let observer = {
     next(res) {
@@ -8,7 +8,6 @@ let observer = {
         //上传进度
         let { percent } = res.total;
         toast.info(`上传:${percent}`)
-            // updateUploadProcess(percent);
     },
     error(err) {
         console.log(err);
@@ -16,7 +15,7 @@ let observer = {
     },
     complete(res) {
         let { key } = res;
-        let completeUrl = `${Domain}/${key}`;
+        let completeUrl = `${domain}/${key}`;
         // 将图片链接显示在右侧
         addLink(completeUrl);
     }

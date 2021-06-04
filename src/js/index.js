@@ -1,4 +1,4 @@
-import "../less/index.less"
+import "../css/index.less"
 import { uploadFile } from "./../utils/qiniuUtil.js";
 import { copyRes } from "./../utils/tool"
 import { toast } from "./../components/Toast/index"
