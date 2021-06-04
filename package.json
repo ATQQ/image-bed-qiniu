@@ -4,25 +4,18 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "node token.js && webpack-dev-server --config=webpack.config.js",
-        "build": "node token.js && rm -rf build && webpack --config=webpack.config.build.js",
-        "dev:dist": "webpack --config=webpack.config.js",
+        "dev": "node token.js && vite",
+        "build": "node token.js && vite build",
+        "serve": "vite preview",
         "deployServer": "npm run build && ./deployServer.sh"
     },
     "keywords": [],
     "author": "ATQQ",
     "license": "ISC",
     "devDependencies": {
-        "clean-webpack-plugin": "^3.0.0",
-        "css-loader": "^3.4.0",
-        "html-webpack-plugin": "^3.2.0",
+        "dotenv": "^10.0.0",
         "less": "^3.10.3",
-        "less-loader": "^5.0.0",
-        "mini-css-extract-plugin": "^0.9.0",
-        "style-loader": "^1.1.2",
-        "webpack": "^4.41.4",
-        "webpack-cli": "^3.3.10",
-        "webpack-dev-server": "^3.10.1"
+        "vite": "^2.3.5"
     },
     "dependencies": {
         "qiniu": "^7.2.2",

@@ -1,4 +1,4 @@
-compressDir="./build"               # 压缩目录 
+compressDir="./dist"               # 压缩目录 
 compressFile="result.tar.gz"        # 压缩后的文件名
 user="root"                         # 远程登录用户
 origin="sugarat.top"                # 远程登录origin
@@ -8,6 +8,6 @@ tar -zvcf ${compressFile} ${compressDir}
 echo "开始-----拷贝至服务器"
 scp ${compressFile} ${user}@${origin}:./
 echo "开始-----部署"
-ssh -p22 ${user}@${origin} "tar -xf ${compressFile} && rm -rf ${targetDir}/build/* && mv build/* ${targetDir}/build && rm -rf ${compressFile}"
+ssh -p22 ${user}@${origin} "tar -xf ${compressFile} && rm -rf ${targetDir}/build/* && mv dist/* ${targetDir}/build && rm -rf ${compressFile}"
 echo "部署完成"
 rm -rf ${compressFile} 

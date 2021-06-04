@@ -11,10 +11,15 @@
 <body>
     <div class="container">
 
-        <div>
-            token到期时间: <span id="ddl"></span>
-            剩余时间：<span id="wait"></span>
-        </div>
+        <header>
+            <div>
+                token到期时间: <span id="ddl"></span>
+                剩余时间：<span id="wait"></span>
+            </div>
+            <span>
+                <a target="_blank" href="https://github.com/ATQQ/image-bed-qiniu">Github</a>
+            </span>
+        </header>
         <div class="area paste-area">
             <h2>上传图片</h2>
             <textarea draggable="true" id="pastePanel" placeholder="可以在此区域粘贴复制的图,拖拽图片文件,通过按钮选择文件进行上传等等方式"></textarea>
@@ -24,10 +29,11 @@
             <h2>结果</h2>
             <ol>
                 <li>
-                    <a target="_blank" href="http://img.cdn.sugarat.top/mdImg/MTU3OTM2ODc3OTM4Nw==579368779387">http://img.cdn.sugarat.top/mdImg/MTU3OTM2ODc3OTM4Nw==579368779387</a>
+                    <a target="_blank"
+                        href="http://img.cdn.sugarat.top/mdImg/MTU3OTM2ODc3OTM4Nw==579368779387">http://img.cdn.sugarat.top/mdImg/MTU3OTM2ODc3OTM4Nw==579368779387</a>
                     <span>
                         <button class="link" title="复制地址">地址</button>
-                        <button class="md" title="复制markdown格式">md</button>  
+                        <button class="md" title="复制markdown格式">md</button>
                         <button class="delete" title="删除">X</button>
                     </span>
                 </li>
@@ -35,5 +41,6 @@
         </div>
     </div>
 </body>
+<script type="module" src="./src/js/index.js"></script>
 
 </html>
