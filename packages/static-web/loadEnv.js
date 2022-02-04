@@ -1,6 +1,6 @@
 // 读取配置的环境变量
-const dotenv =require('dotenv')
-
+const dotenv = require('dotenv')
+const { join } = require('path')
 function load(parseEnvObj) {
   const { parsed } = parseEnvObj
   if (parsed && parsed instanceof Object) {

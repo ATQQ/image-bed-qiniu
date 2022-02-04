@@ -4,3 +4,4 @@ dist
 test
 .vscode
 *.local
+.DS_Store

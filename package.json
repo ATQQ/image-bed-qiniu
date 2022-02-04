@@ -1,16 +1,13 @@
 {
     "name": "image-bed-qiniu",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "private": "true",
     "scripts": {
-        "dev": "node token.js && vite",
-        "build": "node token.js && vite build",
-        "serve": "vite preview",
-        "deployServer": "npm run build && ./deployServer.sh"
+        "dev:static": "cd packages/static-web && npm run dev",
+        "build:static": ""
     },
     "keywords": [],
-    "author": "ATQQ",
+    "author": "sugar",
     "license": "ISC",
     "devDependencies": {
         "dotenv": "^10.0.0",
