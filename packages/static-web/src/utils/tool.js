@@ -1,5 +1,4 @@
 import { toast } from "../components/Toast/index"
-
 /**
  * 将结果写入的剪贴板
  * @param {String} text 

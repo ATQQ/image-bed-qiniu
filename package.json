@@ -1,18 +1,16 @@
 {
     "name": "image-bed-qiniu",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "private": "true",
     "scripts": {
-        "dev": "node token.js && vite",
-        "build": "node token.js && vite build",
-        "serve": "vite preview",
-        "deployServer": "npm run build && ./deployServer.sh"
+        "dev:static": "cd packages/static-web && npm run dev",
+        "build:static": "cd packages/static-web && npm run build"
     },
     "keywords": [],
-    "author": "ATQQ",
+    "author": "sugar",
     "license": "ISC",
     "devDependencies": {
+        "@cloudbase/cli": "^1.12.0",
         "dotenv": "^10.0.0",
         "less": "^3.10.3",
         "vite": "^2.3.5"

@@ -1,0 +1,17 @@
+{
+    "name": "image-bed-qiniu",
+    "private": "true",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "dev": "node token.js && vite",
+        "build": "node token.js && vite build",
+        "serve": "vite preview",
+        "deploy:Server": "npm run build && ./deployServer.sh",
+        "deploy:Cloud":"tcb login && tcb framework deploy"
+    },
+    "keywords": [],
+    "author": "ATQQ",
+    "license": "ISC"
+}
