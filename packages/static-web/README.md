@@ -26,10 +26,10 @@ cd image-bed-qiniu
 
 ### 3. 安装依赖
 ```sh
-yarn install
+pnpm install
 ```
 ### 4. 配置秘钥/空间/域名
-在.env文件中加入相应的内容
+在[.env](./.env)文件中加入相应的内容
 ```sh
 QINIU_ACCESS_KEY=AccessKey
 QINIU_SECRET_KEY=SecretKey
@@ -59,12 +59,12 @@ QINIU_DOMAIN=domain
 ### 运行
 #### 开发环境预览
 ```sh
-npm run dev
+pnpm dev:static
 ```
 
-#### 生产环境
+#### 生产环境构建
 ```sh
-npm run build
+pnpm build:static
 ```
 
 > [qiniu-JavaScript-sdk文档](https://developer.qiniu.com/kodo/sdk/1283/javascript)
