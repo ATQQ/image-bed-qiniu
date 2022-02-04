@@ -5,3 +5,4 @@ test
 .vscode
 *.local
 .DS_Store
+packages/static-web/src/config/qiniu.config.js

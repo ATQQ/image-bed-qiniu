@@ -21,6 +21,9 @@ const options = {
 const putPolicy = new qiniu.rs.PutPolicy(options);
 const uploadToken = putPolicy.uploadToken(mac);
 
+if (!fs.existsSync('./src/config')) {
+    fs.mkdirSync('./src/config', { recursive: true })
+}
 // 将凭证写入到配置文件
 fs.writeFileSync("./src/config/qiniu.config.js", `
 import * as qiniu from "qiniu-js";
