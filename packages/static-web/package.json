@@ -8,8 +8,7 @@
         "dev": "node token.js && vite",
         "build": "node token.js && vite build",
         "serve": "vite preview",
-        "deploy:Server": "npm run build && ./deployServer.sh",
-        "deploy:Cloud": "tcb login && tcb framework deploy"
+        "deploy:Server": "zx ./deploy.mjs"
     },
     "keywords": [],
     "author": "ATQQ",
