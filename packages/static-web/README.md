@@ -3,7 +3,7 @@
 使用七牛云简单搭建的一个Web图床应用,支持粘贴,拖拽上传,直接选择等方式上传图片文件,自动生成markdown格式的图片链接到剪贴板中
 
 ## 效果
-![图片](https://img.cdn.sugarat.top/mdImg/MTU3OTQwMDU4MjE0NA==579400582144)
+![](https://img.cdn.sugarat.top/mdImg/MTU3OTQwMDU4MjE0NA==579400582144)
 
 
 ## 所需资源
@@ -52,7 +52,7 @@ QINIU_DOMAIN=domain
 <details>
 <summary>查看域名</summary>
 
-![图片](https://img.cdn.sugarat.top/mdImg/MTU3Nzc2Mzk0NTk4NA==577763945984)
+![](https://img.cdn.sugarat.top/mdImg/MTU3Nzc2Mzk0NTk4NA==577763945984)
 
 </details> 
 

@@ -104,8 +104,8 @@ resultPanel.addEventListener('click', function (e) {
                 $a.text = href
                 break;
             case 1: // markdown链接
-                copyRes(`![图片](${href})`)
-                $a.text = `![图片](${href})`
+                copyRes(`![](${href})`)
+                $a.text = `![](${href})`
                 break;
             case 2: // 删除
                 if (confirm("确认从图床中删除此图片?")) {

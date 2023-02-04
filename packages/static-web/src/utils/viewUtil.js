@@ -9,7 +9,7 @@ function getLinkDom(url) {
     a.href = url;
     a.target = '_blank';
     a.textContent = url
-    copyRes(`![图片](${url})`);
+    copyRes(`![](${url})`);
     return a;
 }
 
@@ -34,7 +34,7 @@ function appendLink(href) {
     let li = temp.children[0]
     let ol = resultArea.querySelector('ol');
     ol.appendChild(li);
-    copyRes(`![图片](${href})`);
+    copyRes(`![](${href})`);
 }
 
 /**
