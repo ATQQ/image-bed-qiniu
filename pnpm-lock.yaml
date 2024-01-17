@@ -39,6 +39,9 @@ importers:
       axios:
         specifier: ^0.27.2
         version: 0.27.2
+      clipboard-copy:
+        specifier: ^4.0.1
+        version: 4.0.1
       element-plus:
         specifier: ^2.4.3
         version: 2.4.4(vue@3.3.13)
@@ -51,6 +54,9 @@ importers:
       qiniu-js:
         specifier: ^3.4.1
         version: 3.4.1
+      spark-md5:
+        specifier: ^3.0.2
+        version: 3.0.2
       vue:
         specifier: ^3.3.11
         version: 3.3.13(typescript@5.3.3)
@@ -1449,6 +1455,10 @@ packages:
     optionalDependencies:
       fsevents: 2.3.3
     dev: true
+
+  /clipboard-copy@4.0.1:
+    resolution: {integrity: sha512-wOlqdqziE/NNTUJsfSgXmBMIrYmfd5V0HCGsR8uAKHcg+h9NENWINcfRjtWGU77wDHC8B8ijV4hMTGYbrKovng==}
+    dev: false
 
   /cliui@8.0.1:
     resolution: {integrity: sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==}

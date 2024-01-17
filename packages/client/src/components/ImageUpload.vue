@@ -3,12 +3,15 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import { ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
 import { uploadFile } from '../utils/qiniu'
+import { copyRes } from '../utils/stringUtil';
 
 const uploadRef = ref<UploadInstance>()
 const files = ref<UploadUserFile[]>([])
 const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
   files.value = uploadFiles
 }
+const successUrl = ref<string[]>([])
+
 watch(files, () => {
   for (const file of files.value) {
     // 上传
@@ -21,6 +24,8 @@ watch(files, () => {
             file.status = 'success'
           }
         },
+      }).then(v=>{
+        successUrl.value.push(v)
       })
     }
   }
@@ -46,7 +51,7 @@ const registerPasteEvent = () => {
   pastePanelEl.addEventListener('paste', function (e) {
     console.log('paste');
     // 阻止触发默认的粘贴事件
-    e.preventDefault();    
+    e.preventDefault();
     let { items } = e.clipboardData || {};
     if (!items) {
       return
@@ -61,9 +66,9 @@ const registerPasteEvent = () => {
         files.value = files.value.concat({
           name: file.name,
           // 生成一个唯一的数字id
-          raw: { ...file, uid: generateNumericUID(), },
+          raw: Object.assign(file, { uid: generateNumericUID(), }),
           status: 'ready',
-          percentage:0
+          percentage: 0
         })
         empty = false
       }
@@ -114,6 +119,14 @@ const registerPasteEvent = () => {
 watch($pasteArea, () => {
   registerPasteEvent()
 })
+
+const copyAddress = (url: string) => {
+  copyRes(url)
+}
+
+const copyMdAddress = (url: string) => {
+  copyAddress(`![](${url})`)
+}
 </script>
 <template>
   <el-upload v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple :auto-upload="false">
@@ -128,6 +141,15 @@ watch($pasteArea, () => {
       </div>
     </template>
   </el-upload>
+  <ul>
+    <li v-for="(href, idx) in successUrl" :key="idx">
+      <a :href="href" target="_blank">{{ href }}</a>
+      <span>
+        <button class="link" title="复制地址" @click="copyAddress(href)">地址</button>
+        <button class="md" title="复制markdown格式" @click="copyMdAddress(href)">md</button>
+      </span>
+    </li>
+  </ul>
 </template>
 <style lang="scss" scoped>
 .cv-tip {

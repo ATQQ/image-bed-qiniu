@@ -2,17 +2,21 @@ import * as qiniu from "qiniu-js";
 // TODO: 优化
 // @ts-ignore
 import { config, token, domain } from './../config/qiniu.config';
+import { getFileMd5Hash } from "./stringUtil";
 
-function uploadFile(file: File, filename: string, options?: {
+async function uploadFile(file: File, filename: string, options?: {
     process?: (percent: number) => void
 }) {
-    
-    return new Promise((resolve, reject) => {
-        let putExtra = {
-            fname: filename,
+    const bucketPrefix = 'mdImg'
+    const userScope ='sugar'
+    const md5 = await getFileMd5Hash(file)
+    const key = `${bucketPrefix}/${userScope}/${md5}`
+    return new Promise<string>((resolve, reject) => {
+        const putExtra = {
+            fname: key,
             params: {},
         };
-        // 测试代码
+
         let i = 0
         let timer = setInterval(()=>{
             if(i<=100){
@@ -21,9 +25,9 @@ function uploadFile(file: File, filename: string, options?: {
                 return
             }
             clearInterval(timer)
-            resolve(`${domain}/${filename}`)
+            resolve(`${domain}/${putExtra.fname}`)
         },100)
-        // let observable = qiniu.upload(file, filename, token, putExtra, config)
+        // const observable = qiniu.upload(file, putExtra.fname, token, putExtra, config)
 
         // observable.subscribe({
         //     next(res) {
