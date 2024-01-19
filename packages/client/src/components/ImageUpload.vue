@@ -4,13 +4,19 @@ import { ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
 import { uploadFile } from '../utils/qiniu'
 import { copyRes } from '../utils/stringUtil';
-
+import { Picture } from '@element-plus/icons-vue'
 const uploadRef = ref<UploadInstance>()
 const files = ref<UploadUserFile[]>([])
 const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
-  files.value = uploadFiles
+  files.value = uploadFiles.filter(v => {
+    const ok = v.raw?.type.includes('image')
+    if (!ok) {
+      ElMessage.error('只能上传图片')
+    }
+    return ok
+  })
 }
-const successUrl = ref<string[]>([])
+const successImages = ref<{ url: string, name: string }[]>([])
 
 watch(files, () => {
   for (const file of files.value) {
@@ -24,8 +30,14 @@ watch(files, () => {
             file.status = 'success'
           }
         },
-      }).then(v=>{
-        successUrl.value.push(v)
+      }).then(v => {
+        file.status = 'success'
+        // 列表里移除已经删除的
+        files.value.splice(files.value.findIndex(f => f === file), 1)
+        successImages.value.push({
+          url: v,
+          name: file.name || 'image'
+        })
       })
     }
   }
@@ -129,7 +141,8 @@ const copyMdAddress = (url: string) => {
 }
 </script>
 <template>
-  <el-upload v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple :auto-upload="false">
+  <el-upload accept="image/*" v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple
+    :auto-upload="false">
     <el-icon class="el-icon--upload"><upload-filled /></el-icon>
     <div class="el-upload__text">
       拖动文件到这里或 <em>点击上传</em>
@@ -141,13 +154,25 @@ const copyMdAddress = (url: string) => {
       </div>
     </template>
   </el-upload>
-  <ul>
-    <li v-for="(href, idx) in successUrl" :key="idx">
-      <a :href="href" target="_blank">{{ href }}</a>
-      <span>
-        <button class="link" title="复制地址" @click="copyAddress(href)">地址</button>
-        <button class="md" title="复制markdown格式" @click="copyMdAddress(href)">md</button>
-      </span>
+  <!-- 链接列表 -->
+  <ul class="el-upload-list el-upload-list--text">
+    <li class="el-upload-list__item" v-for="(image, idx) in successImages" :key="idx">
+      <div class="el-upload-list__item-info">
+        <div class="el-upload-list__item-name list-item-link-wrapper">
+          <span>
+            <el-icon :size="16">
+              <Picture />
+            </el-icon>
+            <a :href="image.url" target="_blank" class="el-upload-list__item-file-name" title="视野修炼 2024.jpeg">
+              {{ image.name }}
+            </a>
+          </span>
+          <span>
+            <el-button type="primary" link @click="copyAddress(image.url)">url</el-button>
+            <el-button type="success" link @click="copyMdAddress(image.url)">markdown</el-button>
+          </span>
+        </div>
+      </div>
     </li>
   </ul>
 </template>
@@ -171,6 +196,27 @@ const copyMdAddress = (url: string) => {
     top: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+  }
+}
+
+ul.el-upload-list,
+:deep(ul.el-upload-list) {
+  max-width: 666px;
+  margin: 0 auto;
+}
+
+.list-item-link-wrapper {
+  display: flex;
+  justify-content: space-between;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  span {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
