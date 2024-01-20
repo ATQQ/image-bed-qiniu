@@ -1,10 +1,12 @@
 import { ElMessage } from 'element-plus'
-// @ts-ignore
+
+// @ts-expect-error
 import SparkMD5 from 'spark-md5'
 import copy from 'clipboard-copy'
+
 /**
  * 将结果写入的剪贴板
- * @param {String} text
+ * @param {string} text
  */
 export function copyRes(text: string, msg = '结果已成功复制到剪贴板') {
   // 第三方
@@ -20,12 +22,11 @@ export function copyRes(text: string, msg = '结果已成功复制到剪贴板')
     })
 }
 
-
 export function base64(s: string) {
   return window.btoa(unescape(encodeURIComponent(s)))
 }
 
-export function formatDate(d: Date, fmt = 'yyyy-MM-dd hh:mm:ss') {
+export function formatDate(d: Date | number, fmt = 'yyyy-MM-dd hh:mm:ss') {
   if (!(d instanceof Date)) {
     d = new Date(d)
   }
@@ -36,20 +37,20 @@ export function formatDate(d: Date, fmt = 'yyyy-MM-dd hh:mm:ss') {
     'm+': d.getMinutes(), // 分
     's+': d.getSeconds(), // 秒
     'q+': Math.floor((d.getMonth() + 3) / 3), // 季度
-    S: d.getMilliseconds() // 毫秒
+    'S': d.getMilliseconds(), // 毫秒
   }
   if (/(y+)/.test(fmt)) {
     fmt = fmt.replace(
       RegExp.$1,
-      `${d.getFullYear()}`.substr(4 - RegExp.$1.length)
+      `${d.getFullYear()}`.substr(4 - RegExp.$1.length),
     )
   }
-  // eslint-disable-next-line no-restricted-syntax
+
   for (const k in o) {
     if (new RegExp(`(${k})`).test(fmt))
       fmt = fmt.replace(
         RegExp.$1,
-        RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substr(`${o[k]}`.length)
+        RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substr(`${o[k]}`.length),
       )
   }
   return fmt
@@ -82,7 +83,8 @@ export function getFileMd5Hash(file: File) {
 
       if (currentChunk < chunks) {
         loadNext()
-      } else {
+      }
+      else {
         // console.log('finished loading')
         const hashResult = spark.end()
         // console.info('computed hash', hashResult) // Compute hash
@@ -101,7 +103,7 @@ export function getFileMd5Hash(file: File) {
 export function formatSize(
   size: number,
   pointLength?: number,
-  units?: string[]
+  units?: string[],
 ) {
   let unit: any
   units = units || ['B', 'K', 'M', 'G', 'TB']
@@ -115,4 +117,3 @@ export function formatSize(
       : size.toFixed(pointLength === undefined ? 2 : pointLength)) + unit
   )
 }
-

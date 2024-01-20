@@ -4,10 +4,17 @@
     "jsx": "preserve",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "useDefineForClassFields": true,
+    "baseUrl": "./",
     "module": "ESNext",
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@components/": ["src/components/*"]
+    },
     "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
 

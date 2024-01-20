@@ -1,58 +1,51 @@
-import * as qiniu from "qiniu-js";
-// TODO: 优化
-// @ts-ignore
-import { config, token, domain } from './../config/qiniu.config';
-import { getFileMd5Hash } from "./stringUtil";
+import * as qiniu from 'qiniu-js'
+import { getFileMd5Hash } from './stringUtil'
+import type { QiNiuConfig } from '@/store/modules/configStore'
 
-async function uploadFile(file: File, filename: string, options?: {
-    process?: (percent: number) => void
+async function uploadFile(file: File, qiniuOps: QiNiuConfig, options?: {
+  process?: (percent: number) => void
 }) {
-    const bucketPrefix = 'mdImg'
-    const userScope ='sugar'
-    const md5 = await getFileMd5Hash(file)
-    const key = `${bucketPrefix}/${userScope}/${md5}`
-    return new Promise<string>((resolve, reject) => {
-        const putExtra = {
-            fname: key,
-            params: {},
-        };
-
-        let i = 0
-        let timer = setInterval(()=>{
-            if(i<=100){
-                options?.process?.(i)
-                i+=10
-                return
-            }
-            clearInterval(timer)
-            resolve(`${domain}/${putExtra.fname}`)
-        },100)
-        // const observable = qiniu.upload(file, putExtra.fname, token, putExtra, config)
-
-        // observable.subscribe({
-        //     next(res) {
-        //         //上传进度
-        //         let { percent } = res.total;
-        //         options?.process?.(percent)
-        //     },
-        //     error(err) {
-        //         reject(err)
-        //     },
-        //     complete(res) {
-        //         resolve(`${domain}/${res.key}`)
-        //     }
-        // })
+  const { config, domain, token, scope, prefix } = qiniuOps
+  const key = await generateNewFileKey(file, prefix, scope)
+  return new Promise<string>((resolve, reject) => {
+    const putExtra = {
+      fname: key,
+      customVars: {},
+    }
+    let i = 0
+    const timer = setInterval(() => {
+      if (i <= 100) {
+        options?.process?.(i)
+        i += 10
+        return
+      }
+      clearInterval(timer)
+      resolve(`${domain}/${putExtra.fname}`)
+    }, 100)
+    // TODO 测试
+    return
+    const observable = qiniu.upload(file, putExtra.fname, token, putExtra, config)
+    observable.subscribe({
+      next(res) {
+        // 上传进度
+        const { percent } = res.total
+        options?.process?.(percent)
+      },
+      error(err) {
+        reject(err)
+      },
+      complete() {
+        resolve(`${domain}/${putExtra.fname}`)
+      },
     })
+  })
 }
 
-async function generateNewFileKey(file: File,prefix='mdv2',scope='scope'){
-    const md5 = 'md5'
-    const filename = 'filename'
-    // TODO:可配置
-    const key = `${prefix}/${md5}/${filename}`
-    return key
+async function generateNewFileKey(file: File, prefix = 'mdImg', scope = 'sugar') {
+  const md5 = await getFileMd5Hash(file)
+  return `${prefix}/${scope}/${md5}`
 }
 export {
-    uploadFile,
-    generateNewFileKey
+  uploadFile,
+  generateNewFileKey,
 }

@@ -3,9 +3,13 @@ import { UploadFilled } from '@element-plus/icons-vue'
 import { computed, ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
 import { uploadFile } from '../utils/qiniu'
-import { copyRes } from '../utils/stringUtil';
-import { Picture } from '@element-plus/icons-vue'
 import { useFocus } from '@vueuse/core';
+import { useConfigStore, useImageStore } from '@/store'
+import { storeToRefs } from 'pinia';
+
+const imageStore = useImageStore()
+const configStore = useConfigStore()
+const { qiniu } = storeToRefs(configStore)
 
 const uploadRef = ref<UploadInstance>()
 const files = ref<UploadUserFile[]>([])
@@ -18,14 +22,18 @@ const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
     return ok
   })
 }
-const successImages = ref<{ url: string, name: string }[]>([])
 
 watch(files, () => {
   for (const file of files.value) {
     // 上传
     if (file.status === 'ready') {
       file.status = 'uploading'
-      uploadFile(file.raw!, file.name, {
+
+      if (!file.raw) {
+        continue
+      }
+
+      uploadFile(file.raw, qiniu.value, {
         process(percent) {
           file.percentage = percent
           if (percent === 100) {
@@ -36,10 +44,17 @@ watch(files, () => {
         file.status = 'success'
         // 列表里移除已经删除的
         files.value.splice(files.value.findIndex(f => f === file), 1)
-        successImages.value.push({
+
+        // 生成链接
+        imageStore.success.push({
           url: v,
-          name: file.name || 'image'
+          name: file.name || 'image',
+          file: file.raw
         })
+
+        // TODO：自动复制
+      }).catch(err => {
+        ElMessage.error(err)
       })
     }
   }
@@ -101,14 +116,6 @@ const registerPasteEvent = () => {
 watch($pasteArea, () => {
   registerPasteEvent()
 })
-
-const copyAddress = (url: string) => {
-  copyRes(url)
-}
-
-const copyMdAddress = (url: string) => {
-  copyAddress(`![](${url})`)
-}
 const { focused } = useFocus($pasteArea)
 const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '你也可以点击此处，然后粘贴你要上传的图片')
 </script>
@@ -128,27 +135,6 @@ const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '�
       </template>
     </el-upload>
   </div>
-  <!-- 链接列表 -->
-  <ul class="el-upload-list el-upload-list--text">
-    <li class="el-upload-list__item" v-for="(image, idx) in successImages" :key="idx">
-      <div class="el-upload-list__item-info">
-        <div class="el-upload-list__item-name list-item-link-wrapper">
-          <span>
-            <el-icon :size="16">
-              <Picture />
-            </el-icon>
-            <a :href="image.url" target="_blank" class="el-upload-list__item-file-name" title="视野修炼 2024.jpeg">
-              {{ image.name }}
-            </a>
-          </span>
-          <span>
-            <el-button type="primary" link @click="copyAddress(image.url)">url</el-button>
-            <el-button type="success" link @click="copyMdAddress(image.url)">markdown</el-button>
-          </span>
-        </div>
-      </div>
-    </li>
-  </ul>
 </template>
 <style lang="scss" scoped>
 .upload-wrapper {
@@ -191,23 +177,8 @@ const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '�
   }
 }
 
-ul.el-upload-list,
 :deep(ul.el-upload-list) {
   max-width: 666px;
   margin: 20px auto;
 }
-
-.list-item-link-wrapper {
-  display: flex;
-  justify-content: space-between;
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  span {
-    display: flex;
-    align-items: center;
-  }
-}</style>
+</style>
