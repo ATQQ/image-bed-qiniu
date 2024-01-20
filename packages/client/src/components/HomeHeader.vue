@@ -6,10 +6,16 @@ import { storeToRefs } from 'pinia';
 import ConfigPanel from './ConfigPanel.vue';
 import { Refresh } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useIntervalFn } from '@vueuse/core';
 const store = useConfigStore()
 const { qiniu } = storeToRefs(store)
 const expiredTime = ref('')
 const countDown = ref('')
+const isExpired = ref(false)
+
+useIntervalFn(() => {
+  isExpired.value = qiniu.value.date <= Date.now()
+}, 500)
 
 const handleUpdateToken = () => {
     ElMessageBox.prompt('请粘贴新的token', '设置Token').then(v => {
@@ -37,9 +43,10 @@ function refreshDDL() {
 </script>
 <template>
     <header>
-        <details>
+        <span v-if="isExpired">token 已经过期：<el-button type="danger" text :icon="Refresh" @click="handleUpdateToken">点我更新</el-button></span>
+        <details v-else>
             <summary><span>token:过期时间：{{ expiredTime }}</span></summary>
-            剩余时间 ：{{ countDown }} <el-button text :icon="Refresh" @click="handleUpdateToken"> 更新</el-button>
+            剩余时间 ：{{ countDown }} <el-button text :icon="Refresh" @click="handleUpdateToken" type="primary"> 更新</el-button>
         </details>
         <span class="right">
             <ConfigPanel />
