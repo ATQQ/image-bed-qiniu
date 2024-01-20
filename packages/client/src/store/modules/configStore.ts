@@ -37,7 +37,7 @@ const configStore = defineStore('configStore', {
       }
       catch (err: any) {
         console.error(err)
-        ElMessage.error(err?.message)
+        ElMessage.error('token 有误，解析失败')
       }
     },
   },
