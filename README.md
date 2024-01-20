@@ -1,6 +1,6 @@
 <h1 align="center"> 七牛云OSS图床 | monorepo </h1>
 
-<p align="center"><img style="max-width:200px" src="./packages/client/public/favicon.ico"/></p>
+<p align="center"><img width="160px" src="./packages/client/public/favicon.ico"/></p>
 
 基于[七牛云对象存储服务](https://www.qiniu.com/products/kodo)搭建的图床应用
 
@@ -11,18 +11,11 @@
 
 ## 使用
 
-安装 `pnpm` - [pnpm多种安装方式介绍](https://pnpm.io/zh/installation)
+安装依赖推荐使用 `pnpm` - [pnpm多种安装方式介绍](https://pnpm.io/zh/installation)
 
 ```sh
 npm install -g pnpm
 # or
 npx pnpm add -g pnpm
 # or
-```
-
-### 启动
-
-#### 纯静态
-```sh
-pnpm dev:static
 ```
