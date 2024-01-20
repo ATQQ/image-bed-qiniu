@@ -1,70 +1,14 @@
 <script lang="ts" setup>
-import { h, onMounted, ref } from 'vue';
-import { formatDate } from '../utils/stringUtil';
-import { useConfigStore } from '@/store';
-import { storeToRefs } from 'pinia';
 import ConfigPanel from './ConfigPanel.vue';
-import { Refresh } from '@element-plus/icons-vue'
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { useIntervalFn } from '@vueuse/core';
-const store = useConfigStore()
-const { qiniu } = storeToRefs(store)
-const expiredTime = ref('')
-const countDown = ref('')
-const isExpired = ref(false)
-
-useIntervalFn(() => {
-    isExpired.value = qiniu.value.date <= Date.now()
-}, 500)
-
-const handleCheckConfig = () => {
-    ElMessageBox({
-        title: '相关配置',
-        message: h('pre', null, `${JSON.stringify(qiniu.value, (key, value) => {
-            if (key === 'token') {
-                return
-            }
-            if(key==='date'){
-                return formatDate(value, 'yyyy-MM-dd hh:mm:ss')
-            }
-            return value
-        }, 2)}`)
-    })
-}
-const handleUpdateToken = () => {
-    ElMessageBox.prompt('请粘贴新的token', '设置Token').then(v => {
-        store.parseQiniuToken(v.value)
-    }).catch(() => {
-        ElMessage.info('取消')
-    })
-}
-onMounted(() => {
-    refreshDDL()
-})
-function refreshDDL() {
-    expiredTime.value = formatDate(qiniu.value.date, 'yyyy-MM-dd')
-    const refreshWait = () => {
-        let wait = ((qiniu.value.date - Date.now()) / 1000) >> 0
-        const day = (wait / (24 * 60 * 60)) >> 0
-        wait -= day * 24 * 60 * 60
-        const hour = (wait / (60 * 60)) >> 0
-        wait -= hour * 60 * 60
-        countDown.value = `${day}天 ${hour}时 ${wait} 秒`
-        requestAnimationFrame(refreshWait)
-    }
-    refreshWait()
-}
 </script>
 <template>
     <header>
-        <span v-if="isExpired">token 已经过期：<el-button type="danger" text :icon="Refresh"
-                @click="handleUpdateToken">点我更新</el-button></span>
-        <details v-else>
-            <summary><span>token:过期时间：{{ expiredTime }}</span></summary>
-            剩余时间 ：{{ countDown }} <el-button text :icon="Refresh" @click="handleUpdateToken" type="primary"> 更新</el-button>
-        </details>
+        <div class="left">
+            <img src="../assets/logo.gif">
+            <span>七牛云 OSS 图床</span>           
+        </div>
         <span class="right">
-            <ConfigPanel @click="handleCheckConfig" />
+            <ConfigPanel />
             <a href="https://github.com/ATQQ/image-bed-qiniu" target="_blank" noreferrer noopener>
                 GitHub
             </a>
@@ -77,15 +21,18 @@ header {
     justify-content: space-between;
     padding: 18px;
 }
-
+.left {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    img{
+        height: 40px;
+        margin-right: 10px;
+    }
+}
 .right {
     display: flex;
     align-items: center;
-
-    i {
-        margin-right: 10px;
-        cursor: pointer;
-    }
 
     a {
         color: var(--el-text-color-regular);

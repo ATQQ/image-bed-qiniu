@@ -25,4 +25,9 @@ watch(qiniuToken, (newValue) => {
   <!-- <RouterView /> -->
 </template>
 
-<style scoped></style>
+<style>
+body{
+  margin: 0;
+  padding: 0;
+}
+</style>

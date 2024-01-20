@@ -29,7 +29,7 @@ const configStore = defineStore('configStore', {
   actions: {
     parseQiniuToken(token?: string) {
       try {
-        const config = JSON.parse(atob(token || import.meta.env.VITE_APP_QINIU_TOKEN))
+        const config = JSON.parse(atob(token ?? import.meta.env.VITE_APP_QINIU_TOKEN))
         Object.assign(this.qiniu, config)
         if (token) {
           localStorage.setItem('qiniu-token', token)
