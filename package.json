@@ -9,6 +9,8 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "dev:client": "cd packages/client && npm run dev",
+    "build:client": "cd packages/client && npm run build",
     "dev:static": "cd packages/static-web && npm run dev",
     "build:static": "cd packages/static-web && npm run build",
     "postinstall": "npx simple-git-hooks"
