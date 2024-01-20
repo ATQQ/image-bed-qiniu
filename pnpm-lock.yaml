@@ -49,6 +49,18 @@ importers:
         specifier: ^2.9.12
         version: 2.9.12(less@3.13.1)
 
+  packages/cli:
+    dependencies:
+      copy-paste:
+        specifier: ^1.5.3
+        version: 1.5.3
+      dotenv:
+        specifier: ^10.0.0
+        version: 10.0.0
+      qiniu:
+        specifier: ^7.11.0
+        version: 7.11.0
+
   packages/client:
     dependencies:
       '@element-plus/icons-vue':
@@ -2072,6 +2084,12 @@ packages:
       is-what: 3.14.1
     dev: true
 
+  /copy-paste@1.5.3:
+    resolution: {integrity: sha512-qOnFo+8l8vemGmdcoCiD7gPTefkXEg2rivYE+EBtuKOj754eFivkGhGAM9e/xqShrpuVE11evSxGnHwVAUK1Iw==}
+    dependencies:
+      iconv-lite: 0.4.24
+    dev: false
+
   /copy-to@2.0.1:
     resolution: {integrity: sha512-3DdaFaU/Zf1AnpLiFDeNCD4TOWe3Zl2RZaTzUvWiIk5ERzcCodOE20Vqq4fzCbNoHURFHT4/us/Lfq+S2zyY4w==}
     dev: false
@@ -2266,7 +2284,6 @@ packages:
   /dotenv@10.0.0:
     resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
     engines: {node: '>=10'}
-    dev: true
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}

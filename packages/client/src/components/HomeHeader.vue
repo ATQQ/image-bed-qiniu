@@ -4,12 +4,20 @@ import { formatDate } from '../utils/stringUtil';
 import { useConfigStore } from '@/store';
 import { storeToRefs } from 'pinia';
 import ConfigPanel from './ConfigPanel.vue';
-
+import { Refresh } from '@element-plus/icons-vue'
+import { ElMessage, ElMessageBox } from 'element-plus';
 const store = useConfigStore()
 const { qiniu } = storeToRefs(store)
 const expiredTime = ref('')
 const countDown = ref('')
 
+const handleUpdateToken = () => {
+    ElMessageBox.prompt('请粘贴新的token', '设置Token').then(v => {
+        store.parseQiniuToken(v.value)
+    }).catch(()=>{
+        ElMessage.info('取消')
+    })
+}
 onMounted(() => {
     refreshDDL()
 })
@@ -31,7 +39,7 @@ function refreshDDL() {
     <header>
         <details>
             <summary><span>token:过期时间：{{ expiredTime }}</span></summary>
-            剩余时间 ：{{ countDown }}
+            剩余时间 ：{{ countDown }} <el-button text :icon="Refresh" @click="handleUpdateToken"> 更新</el-button>
         </details>
         <span class="right">
             <ConfigPanel />
@@ -47,10 +55,12 @@ header {
     justify-content: space-between;
     padding: 18px;
 }
-.right{
+
+.right {
     display: flex;
     align-items: center;
-    a{
+
+    a {
         margin-left: 10px;
     }
 }

@@ -33,7 +33,8 @@ const configStore = defineStore('configStore', {
         Object.assign(this.qiniu, config)
       }
       catch (err: any) {
-        ElMessage.error(err)
+        console.error(err)
+        ElMessage.error(err?.message)
       }
     },
   },
