@@ -20,11 +20,14 @@
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.3",
     "@types/node": "^20",
+    "@typescript-eslint/parser": "^6.19.0",
     "dotenv": "^10.0.0",
     "eslint": "^8.56.0",
     "less": "^3.13.1",
     "lint-staged": "^15.2.0",
+    "prettier": "^3.2.4",
     "simple-git-hooks": "^2.9.0",
+    "typescript": "^5.3.3",
     "vite": "^2.9.12"
   },
   "simple-git-hooks": {

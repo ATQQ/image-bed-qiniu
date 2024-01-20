@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { UploadFilled } from '@element-plus/icons-vue'
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
 import { uploadFile } from '../utils/qiniu'
 import { copyRes } from '../utils/stringUtil';
 import { Picture } from '@element-plus/icons-vue'
+import { useFocus } from '@vueuse/core';
+
 const uploadRef = ref<UploadInstance>()
 const files = ref<UploadUserFile[]>([])
 const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
@@ -95,38 +97,6 @@ const registerPasteEvent = () => {
   document.addEventListener('dragover', function (e) {
     e.preventDefault()
   }, true)
-
-  /**
-   * 监听文件拖拽上传事件
-   */
-  let drag = false;
-  pastePanelEl.addEventListener('dragenter', function () {
-    drag = true;
-  })
-
-  pastePanelEl.addEventListener('dragover', function () {
-    drag = true;
-  });
-
-  pastePanelEl.addEventListener('dragleave', function () {
-    drag = false;
-  })
-
-  pastePanelEl.addEventListener('drop', function (e) {
-    if (drag) {
-      let { files } = e?.dataTransfer || {};
-      if (!files) {
-        return
-      }
-      for (const file of files) {
-        if (file.type.startsWith("image")) {
-          // TODO
-          return;
-        }
-      }
-      ElMessage.error('没有图片文件')
-    }
-  })
 }
 watch($pasteArea, () => {
   registerPasteEvent()
@@ -139,21 +109,25 @@ const copyAddress = (url: string) => {
 const copyMdAddress = (url: string) => {
   copyAddress(`![](${url})`)
 }
+const { focused } = useFocus($pasteArea)
+const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '你也可以点击此处，然后粘贴你要上传的图片')
 </script>
 <template>
-  <el-upload accept="image/*" v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple
-    :auto-upload="false">
-    <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-    <div class="el-upload__text">
-      拖动文件到这里或 <em>点击上传</em>
-    </div>
-    <template #tip>
-      <div class="cv-tip">
-        <textarea draggable="true" ref="$pasteArea" placeholder=""></textarea>
-        <p>你也可以点击此处，然后粘贴你要上传的图片</p>
+  <div class="upload-wrapper">
+    <el-upload accept="image/*" v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple
+      :auto-upload="false">
+      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+      <div class="el-upload__text">
+        拖动文件到这里或 <em>点击上传</em>
       </div>
-    </template>
-  </el-upload>
+      <template #tip>
+        <div class="cv-tip">
+          <textarea ref="$pasteArea"></textarea>
+          <p>{{ pasteText }}</p>
+        </div>
+      </template>
+    </el-upload>
+  </div>
   <!-- 链接列表 -->
   <ul class="el-upload-list el-upload-list--text">
     <li class="el-upload-list__item" v-for="(image, idx) in successImages" :key="idx">
@@ -177,32 +151,50 @@ const copyMdAddress = (url: string) => {
   </ul>
 </template>
 <style lang="scss" scoped>
+.upload-wrapper {
+  position: relative;
+}
+
 .cv-tip {
   text-align: center;
-  padding: 20px;
-  position: relative;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  background-color: transparent;
 
   textarea {
     border: none;
     outline: 0;
     width: 100%;
+    height: 100%;
     resize: none;
-    height: 120px;
+    background: transparent;
+    color: white;
+    /* 或者是背景颜色，以隐藏文本 */
+    caret-color: transparent;
+
+    /* 隐藏光标 */
+    &:focus+p {
+      color: var(--el-color-success);
+    }
   }
 
   p {
     position: absolute;
+    pointer-events: none;
     left: 50%;
     top: 50%;
+    margin: 0;
     transform: translate(-50%, -50%);
     text-align: center;
+    font-size: 14px;
   }
 }
 
 ul.el-upload-list,
 :deep(ul.el-upload-list) {
   max-width: 666px;
-  margin: 0 auto;
+  margin: 20px auto;
 }
 
 .list-item-link-wrapper {
@@ -218,5 +210,4 @@ ul.el-upload-list,
     display: flex;
     align-items: center;
   }
-}
-</style>
+}</style>
