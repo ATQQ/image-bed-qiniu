@@ -2,7 +2,7 @@ node_modules
 *.txt
 dist
 test
-.vscode
 *.local
 .DS_Store
 packages/static-web/src/config/qiniu.config.js
+packages/client/src/config/qiniu.config.js

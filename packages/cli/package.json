@@ -1,0 +1,18 @@
+{
+  "name": "cli",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "main": "token.js",
+  "scripts": {
+    "generate": "node ./token.js"
+  },
+  "dependencies": {
+    "copy-paste": "^1.5.3",
+    "dotenv": "^10.0.0",
+    "qiniu": "^7.11.0"
+  }
+}
