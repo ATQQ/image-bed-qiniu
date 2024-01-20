@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { h, onMounted, ref } from 'vue';
 import { formatDate } from '../utils/stringUtil';
 import { useConfigStore } from '@/store';
 import { storeToRefs } from 'pinia';
@@ -14,13 +14,27 @@ const countDown = ref('')
 const isExpired = ref(false)
 
 useIntervalFn(() => {
-  isExpired.value = qiniu.value.date <= Date.now()
+    isExpired.value = qiniu.value.date <= Date.now()
 }, 500)
 
+const handleCheckConfig = () => {
+    ElMessageBox({
+        title: '相关配置',
+        message: h('pre', null, `${JSON.stringify(qiniu.value, (key, value) => {
+            if (key === 'token') {
+                return
+            }
+            if(key==='date'){
+                return formatDate(value, 'yyyy-MM-dd hh:mm:ss')
+            }
+            return value
+        }, 2)}`)
+    })
+}
 const handleUpdateToken = () => {
     ElMessageBox.prompt('请粘贴新的token', '设置Token').then(v => {
         store.parseQiniuToken(v.value)
-    }).catch(()=>{
+    }).catch(() => {
         ElMessage.info('取消')
     })
 }
@@ -43,13 +57,14 @@ function refreshDDL() {
 </script>
 <template>
     <header>
-        <span v-if="isExpired">token 已经过期：<el-button type="danger" text :icon="Refresh" @click="handleUpdateToken">点我更新</el-button></span>
+        <span v-if="isExpired">token 已经过期：<el-button type="danger" text :icon="Refresh"
+                @click="handleUpdateToken">点我更新</el-button></span>
         <details v-else>
             <summary><span>token:过期时间：{{ expiredTime }}</span></summary>
             剩余时间 ：{{ countDown }} <el-button text :icon="Refresh" @click="handleUpdateToken" type="primary"> 更新</el-button>
         </details>
         <span class="right">
-            <ConfigPanel />
+            <ConfigPanel @click="handleCheckConfig" />
             <a href="https://github.com/ATQQ/image-bed-qiniu" target="_blank" noreferrer noopener>
                 GitHub
             </a>
@@ -67,8 +82,14 @@ header {
     display: flex;
     align-items: center;
 
+    i {
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
     a {
-        margin-left: 10px;
+        color: var(--el-text-color-regular);
+        text-decoration: none;
     }
 }
 </style>

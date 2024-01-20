@@ -22,8 +22,7 @@ async function uploadFile(file: File, qiniuOps: QiNiuConfig, options?: {
       clearInterval(timer)
       resolve(`${domain}/${putExtra.fname}`)
     }, 100)
-    // TODO 测试
-    return
+
     const observable = qiniu.upload(file, putExtra.fname, token, putExtra, config)
     observable.subscribe({
       next(res) {
