@@ -1,5 +1,8 @@
 // 生成 token 并复制到剪贴板
 import process from 'process'
+import fs from 'fs'
+import path, { dirname } from 'path'
+import { fileURLToPath } from 'url'
 import qiniu from 'qiniu'
 import dotenv from 'dotenv'
 import ncp from 'copy-paste'
@@ -36,9 +39,14 @@ const envToken = btoa(JSON.stringify({
 
   // },
 }))
+if (!process.env.CI) {
+  // 复制到剪贴板
+  ncp.copy(envToken, () => {
+    console.log('【token】已写入剪贴板')
+    console.log(envToken)
+  })
+}
 
-// 复制到剪贴板
-ncp.copy(envToken, () => {
-  console.log('【token】已写入剪贴板')
-  console.log(envToken)
-})
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+fs.writeFileSync(path.join(__dirname, '../client/.env.local'), `VITE_APP_QINIU_TOKEN=${envToken}`)

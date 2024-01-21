@@ -60,6 +60,8 @@ node token.js
 ![token-snippet](./token.png)
 
 ### 配置项目默认
+*执行 `node token.js` 默认会生成这个文件*
+
 在 [packages/client](./../client/) 下创建`.env.local`
 ```sh
 VITE_APP_QINIU_TOKEN=你的token
