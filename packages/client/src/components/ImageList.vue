@@ -5,7 +5,8 @@ import { useImageStore } from '@/store'
 import { computed } from 'vue';
 import { ElMessageBox } from 'element-plus'
 import { IImage } from '@/store/modules/imageStore'
-
+import { ref } from 'vue'
+import { useUploadConfig } from '@/composables';
 const imageStore = useImageStore()
 const copyAddress = (url: string) => {
   copyRes(url)
@@ -29,12 +30,20 @@ const checkInfo = (image: IImage) => {
       </div>`
   })
 }
+const uploadConfig = useUploadConfig()
+const currentPage = ref(1)
+
+const showImage =computed(()=>{
+  const pageSize = uploadConfig.value.pageSize
+  const current = currentPage.value
+  return successImages.value.slice((current - 1) * pageSize, current * pageSize)
+})
 </script>
 <template>
   <!-- 链接列表 -->
   <p class="title">历史上传记录 ↓</p>
   <ul class="el-upload-list el-upload-list--text">
-    <li class="el-upload-list__item" v-for="(image, idx) in successImages" :key="idx">
+    <li class="el-upload-list__item" v-for="(image, idx) in showImage" :key="idx">
       <div class="el-upload-list__item-info">
         <div class="el-upload-list__item-name list-item-link-wrapper">
           <span>
@@ -54,6 +63,10 @@ const checkInfo = (image: IImage) => {
       </div>
     </li>
   </ul>
+  <div class="pagination">
+    <el-pagination small background v-model:current-page="currentPage" v-model:page-size="uploadConfig.pageSize"
+      :page-sizes="[20, 50, 100, 200]" layout="total, sizes, prev, pager, next" :total="successImages.length" />
+  </div>
 </template>
 <style lang="scss" scoped>
 .title {
@@ -73,7 +86,6 @@ ul.el-upload-list {
   a {
     color: inherit;
     text-decoration: none;
-    max-width: 200px;
   }
 
   span {
@@ -81,10 +93,42 @@ ul.el-upload-list {
     align-items: center;
   }
 }
+
 .ellipsis {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 500px) {
+  .list-item-link-wrapper {
+    a {
+      max-width: 200px;
+    }
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .list-item-link-wrapper {
+    a {
+      max-width: 160px;
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+
+  .el-pagination {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    :deep(.el-pager){
+      margin: 10px;
+    }
+  }
 }
 </style>
 <style lang="scss">

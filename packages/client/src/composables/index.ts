@@ -24,6 +24,6 @@ export function useIsMobile() {
 }
 
 export function useUploadConfig() {
-  const cacheConfig = useLocalStorage('uploadConfig', { autoCopy: true, copyType: 'markdown' })
+  const cacheConfig = useLocalStorage('uploadConfig', { autoCopy: true, copyType: 'markdown', pageSize: 20 })
   return cacheConfig
 }
