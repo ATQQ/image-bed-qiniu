@@ -16,24 +16,29 @@ jobs:
 
     strategy:
       matrix:
-        node-version: 20
+        node-version: [20]
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-    
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
 
+      - uses: pnpm/action-setup@v2
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
       - name: Install dependencies
         run: |
           cd ./packages/client
           pnpm install --frozen-lockfile
+      
       - name: Build client
         run: |
           echo ${{ github.workspace }}
