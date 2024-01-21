@@ -15,6 +15,11 @@ const isExpired = ref(false)
 
 useIntervalFn(() => {
     isExpired.value = qiniu.value.date <= Date.now()
+    if(isExpired.value){
+        // 过期了，尝试自动取默认的token
+        localStorage.removeItem('qiniu-token')
+        store.parseQiniuToken()
+    }
 }, 500)
 
 onMounted(() => {
