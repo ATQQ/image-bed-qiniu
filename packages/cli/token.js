@@ -14,13 +14,13 @@ const bucket = process.env.QINIU_BUCKET
 const domain = process.env.QINIU_DOMAIN
 const prefix = process.env.QINIU_PREFIX
 const scope = process.env.QINIU_SCOPE
-
+const expires = process.env.QINIU_EXPIRES
 // 鉴权对象
 const mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
 
 const options = {
   scope: bucket,
-  expires: 60 * 60 * 24 * 30, // 过期时间(s)
+  expires: +expires || 60 * 60 * 24 * 30, // 过期时间(s)
 }
 const putPolicy = new qiniu.rs.PutPolicy(options)
 const uploadToken = putPolicy.uploadToken(mac)
