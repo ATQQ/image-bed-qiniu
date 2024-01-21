@@ -29,14 +29,14 @@ const configStore = defineStore('configStore', {
   actions: {
     parseQiniuToken(token?: string) {
       try {
-        const config = JSON.parse(atob(token ?? import.meta.env.VITE_APP_QINIU_TOKEN))
+        // 兜底都取默认的token
+        const config = JSON.parse(atob(token || import.meta.env.VITE_APP_QINIU_TOKEN))
         Object.assign(this.qiniu, config)
         if (token) {
           localStorage.setItem('qiniu-token', token)
         }
       }
       catch (err: any) {
-        console.error(err)
         ElMessage.error('token 有误，解析失败')
       }
     },

@@ -6,7 +6,8 @@ import ImageUpload from './components/ImageUpload.vue'
 import { useConfigStore } from './store';
 import { useLocalStorage } from '@vueuse/core';
 const store = useConfigStore()
-const qiniuToken = useLocalStorage('qiniu-token', import.meta.env.VITE_APP_QINIU_TOKEN)
+// 默认取用户设置的token
+const qiniuToken = useLocalStorage('qiniu-token', '')
 
 watch(qiniuToken, (newValue) => {
   store.parseQiniuToken(newValue)
