@@ -7,8 +7,8 @@ import { copyRes } from '@/utils/stringUtil';
 const cacheConfig = useUploadConfig()
 const store = useImageStore()
 const { success } = storeToRefs(store)
-watch(() => success.value.length, (length) => {
-    const uploadItem = success.value[length - 1]
+watch(() => success.value.length, () => {
+    const uploadItem = success.value[0]
     const { autoCopy, copyType } = cacheConfig.value
     if (autoCopy) {
         copyRes(copyType === 'url' ? uploadItem.url : `![](${uploadItem.url})`)

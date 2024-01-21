@@ -46,13 +46,11 @@ watch(files, () => {
         files.value.splice(files.value.findIndex(f => f === file), 1)
 
         // 生成链接
-        imageStore.success.push({
+        imageStore.addImage({
           url: v,
           name: file.name || 'image',
           file: file.raw
         })
-
-        // TODO：自动复制
       }).catch(err => {
         ElMessage.error(err)
       })
