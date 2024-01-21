@@ -12,17 +12,17 @@ async function uploadFile(file: File, qiniuOps: QiNiuConfig, options?: {
       fname: key,
       customVars: {},
     }
-    let i = 0
-    const timer = setInterval(() => {
-      if (i <= 100) {
-        options?.process?.(i)
-        i += 10
-        return
-      }
-      clearInterval(timer)
-      resolve(`${domain}/${putExtra.fname}`)
-    }, 100)
-
+    // let i = 0
+    // const timer = setInterval(() => {
+    //   if (i <= 100) {
+    //     options?.process?.(i)
+    //     i += 10
+    //     return
+    //   }
+    //   clearInterval(timer)
+    //   resolve(`${domain}/${putExtra.fname}`)
+    // }, 100)
+    // return
     const observable = qiniu.upload(file, putExtra.fname, token, putExtra, config)
     observable.subscribe({
       next(res) {

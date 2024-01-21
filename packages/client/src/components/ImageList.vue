@@ -16,8 +16,8 @@ const successImages = computed(() => imageStore.success)
 
 </script>
 <template>
-<!-- 链接列表 -->
-<ul class="el-upload-list el-upload-list--text">
+  <!-- 链接列表 -->
+  <ul class="el-upload-list el-upload-list--text">
     <li class="el-upload-list__item" v-for="(image, idx) in successImages" :key="idx">
       <div class="el-upload-list__item-info">
         <div class="el-upload-list__item-name list-item-link-wrapper">
@@ -39,7 +39,7 @@ const successImages = computed(() => imageStore.success)
   </ul>
 </template>
 <style lang="scss" scoped>
-ul.el-upload-list{
+ul.el-upload-list {
   max-width: 666px;
   margin: 20px auto;
 }
