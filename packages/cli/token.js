@@ -7,8 +7,10 @@ import qiniu from 'qiniu'
 import dotenv from 'dotenv'
 import ncp from 'copy-paste'
 
-dotenv.config()
-
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+dotenv.config({ path: path.join(__dirname, '.env.local') })
+dotenv.config({ path: path.join(__dirname, '.env') })
 // 七牛账号下的一对有效的Access Key和Secret Key
 // 对象存储空间名称 bucket
 const accessKey = process.env.QINIU_ACCESS_KEY
@@ -47,6 +49,4 @@ if (!process.env.CI) {
   })
 }
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
 fs.writeFileSync(path.join(__dirname, '../client/.env.local'), `VITE_APP_QINIU_TOKEN=${envToken}`)
