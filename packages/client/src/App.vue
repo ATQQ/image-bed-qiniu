@@ -7,7 +7,7 @@ import { useConfigStore } from './store';
 import { useLocalStorage } from '@vueuse/core';
 const store = useConfigStore()
 // 默认取用户设置的token
-const qiniuToken = useLocalStorage('qiniu-token', '')
+const qiniuToken = useLocalStorage('qiniu-token', undefined)
 
 watch(qiniuToken, (newValue) => {
   store.parseQiniuToken(newValue)

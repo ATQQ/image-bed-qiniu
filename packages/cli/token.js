@@ -48,5 +48,6 @@ if (!process.env.CI) {
     console.log(envToken)
   })
 }
-
-fs.writeFileSync(path.join(__dirname, '../client/.env.local'), `VITE_APP_QINIU_TOKEN=${envToken}`)
+if (!process.env.copy) {
+  fs.writeFileSync(path.join(__dirname, '../client/.env.local'), `VITE_APP_QINIU_TOKEN=${envToken}`)
+}

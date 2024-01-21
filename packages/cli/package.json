@@ -8,7 +8,8 @@
   "keywords": [],
   "main": "token.js",
   "scripts": {
-    "generate": "node ./token.js"
+    "generate": "node ./token.js",
+    "generare:copy": "copy=true node ./token.js"
   },
   "dependencies": {
     "copy-paste": "^1.5.3",
