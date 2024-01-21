@@ -33,7 +33,7 @@ const checkInfo = (image: IImage) => {
 const uploadConfig = useUploadConfig()
 const currentPage = ref(1)
 
-const showImage =computed(()=>{
+const showImage = computed(() => {
   const pageSize = uploadConfig.value.pageSize
   const current = currentPage.value
   return successImages.value.slice((current - 1) * pageSize, current * pageSize)
@@ -46,7 +46,7 @@ const showImage =computed(()=>{
     <li class="el-upload-list__item" v-for="(image, idx) in showImage" :key="idx">
       <div class="el-upload-list__item-info">
         <div class="el-upload-list__item-name list-item-link-wrapper">
-          <span>
+          <span class="ellipsis left">
             <el-icon :size="16">
               <Picture />
             </el-icon>
@@ -54,7 +54,7 @@ const showImage =computed(()=>{
               {{ image.name }}
             </a>
           </span>
-          <span style="min-width: 160px;">
+          <span style="width: 160px;" class="right">
             <el-button type="primary" link @click="checkInfo(image)">🔍</el-button>
             <el-button type="primary" link @click="copyAddress(image.url)">url</el-button>
             <el-button type="success" link @click="copyMdAddress(image.url)">markdown</el-button>
@@ -83,6 +83,10 @@ ul.el-upload-list {
   display: flex;
   justify-content: space-between;
 
+  .left{
+    flex: 1;
+  }
+
   a {
     color: inherit;
     text-decoration: none;
@@ -100,22 +104,6 @@ ul.el-upload-list {
   text-overflow: ellipsis;
 }
 
-@media screen and (max-width: 500px) {
-  .list-item-link-wrapper {
-    a {
-      max-width: 200px;
-    }
-  }
-}
-
-@media screen and (max-width: 390px) {
-  .list-item-link-wrapper {
-    a {
-      max-width: 160px;
-    }
-  }
-}
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -125,7 +113,8 @@ ul.el-upload-list {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    :deep(.el-pager){
+
+    :deep(.el-pager) {
       margin: 10px;
     }
   }
@@ -136,5 +125,4 @@ ul.el-upload-list {
   li {
     word-break: break-all;
   }
-}
-</style>
+}</style>
