@@ -42,7 +42,7 @@ jobs:
         run: |
           echo ${{ github.workspace }}
           cd ./packages/client
-          pnpm build
+          pnpm build:github
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -50,4 +50,4 @@ jobs:
           publish_dir: ./packages/client/dist # 文档打包产物的目录名就是build
           user_name: 'github-actions[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
-          commit_message: ${{ github.event.head_commit.message }}
+          commit_message: ${{ github.event.head_commit.message }}`

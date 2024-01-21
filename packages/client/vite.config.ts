@@ -18,26 +18,26 @@ export default defineConfig({
     vueJsx(),
     // Element Plus 的UI按需引入配置
     AutoImport({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [ElementPlusResolver()],
     }),
     ElementPlus({
-      defaultLocale: 'zh-cn'
-    })
+      defaultLocale: 'zh-cn',
+    }),
   ],
   test: {
     globals: true,
     environment: 'jsdom',
     exclude: [...configDefaults.exclude, 'e2e/*'],
-    root: fileURLToPath(new URL('./', import.meta.url))
+    root: fileURLToPath(new URL('./', import.meta.url)),
   },
   optimizeDeps: {
-    include: ['vue', 'vue-router', 'pinia', 'axios']
+    include: ['vue', 'vue-router', 'pinia', 'axios'],
   },
   build: {
-    sourcemap: true
+    sourcemap: true,
   },
   server: {
     port: 8080,
@@ -47,23 +47,23 @@ export default defineConfig({
         target:
           'https://service-rbji0bev-1256505457.cd.apigw.tencentcs.com/release',
         changeOrigin: true,
-        rewrite: p => p.replace(/^\/api/, '')
+        rewrite: p => p.replace(/^\/api/, ''),
       },
       '/api-prod/': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: p => p.replace(/^\/api-prod/, '')
+        rewrite: p => p.replace(/^\/api-prod/, ''),
       },
       '/api-test/': {
         target: 'http://localhost:3001',
         changeOrigin: true,
-        rewrite: p => p.replace(/^\/api-test/, '')
-      }
-    }
+        rewrite: p => p.replace(/^\/api-test/, ''),
+      },
+    },
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
-    }
-  }
+      '@': path.resolve(__dirname, './src'),
+    },
+  },
 })
