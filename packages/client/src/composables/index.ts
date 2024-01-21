@@ -1,6 +1,5 @@
 import { computed } from 'vue'
-import { useWindowSize } from '@vueuse/core'
-
+import { useLocalStorage, useWindowSize } from '@vueuse/core'
 export function useIsMobile() {
   // 使用正则表达式检查userAgent字符串是否匹配移动设备
   const mobileRegex
@@ -22,4 +21,9 @@ export function useIsMobile() {
     return mobileRegex.test(userAgent)
       || isTouchDevice
   })
+}
+
+export function useUploadConfig() {
+  const cacheConfig = useLocalStorage('uploadConfig', { autoCopy: true, copyType: 'markdown' })
+  return cacheConfig
 }

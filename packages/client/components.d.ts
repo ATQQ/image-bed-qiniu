@@ -11,11 +11,15 @@ declare module 'vue' {
     ElButton: typeof import('element-plus/es')['ElButton']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElIcon: typeof import('element-plus/es')['ElIcon']
+    ElOption: typeof import('element-plus/es')['ElOption']
+    ElSelect: typeof import('element-plus/es')['ElSelect']
+    ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     HomeHeader: typeof import('./src/components/HomeHeader.vue')['default']
     ImageList: typeof import('./src/components/ImageList.vue')['default']
     ImageUpload: typeof import('./src/components/ImageUpload.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UploadTool: typeof import('./src/components/UploadTool.vue')['default']
   }
 }

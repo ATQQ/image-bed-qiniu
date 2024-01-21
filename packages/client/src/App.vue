@@ -3,6 +3,7 @@ import { watch } from 'vue';
 import HomeHeader from './components/HomeHeader.vue';
 import ImageList from './components/ImageList.vue';
 import ImageUpload from './components/ImageUpload.vue'
+import UploadTool from './components/UploadTool.vue'
 import { useConfigStore } from './store';
 import { useLocalStorage } from '@vueuse/core';
 const store = useConfigStore()
@@ -17,10 +18,13 @@ watch(qiniuToken, (newValue) => {
 </script>
 
 <template>
+  <!-- 头部控制区域 -->
   <HomeHeader />
-  <!-- 控制区域 -->
+  <!-- TODO:控制区域 -->
   <!-- 上传图片区域 -->
   <ImageUpload />
+  <!-- 操作区域 -->
+  <UploadTool />
   <!-- 图片链接区域 -->
   <ImageList />
   <!-- <RouterView /> -->
