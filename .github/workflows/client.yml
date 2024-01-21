@@ -54,6 +54,14 @@ jobs:
           pnpm install --frozen-lockfile
       
       - name: Build client
+        env:
+          QINIU_ACCESS_KEY: ${{secrets.QINIU_ACCESS_KEY}}
+          QINIU_BUCKET: ${{secrets.QINIU_BUCKET}}
+          QINIU_SECRET_KEY: ${{secrets.QINIU_SECRET_KEY}}
+          QINIU_DOMAIN: $${{vars.QINIU_DOMAIN}}
+          QINIU_PREFIX: ${{vars.QINIU_PREFIX}}
+          QINIU_SCOPE: ${{vars.QINIU_SCOPE}}
+          QINIU_EXPIRES: ${{vars.QINIU_EXPIRES}}
         run: |
           echo ${{ github.workspace }}
           cd ./packages/client
