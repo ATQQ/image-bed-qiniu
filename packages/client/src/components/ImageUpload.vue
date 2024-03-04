@@ -49,7 +49,8 @@ watch(files, () => {
         imageStore.addImage({
           url: v,
           name: file.name || 'image',
-          file: file.raw
+          file: file.raw,
+          size: file.raw?.size || 0,
         })
       }).catch(err => {
         ElMessage.error(err)

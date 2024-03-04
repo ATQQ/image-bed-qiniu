@@ -12,6 +12,7 @@ async function uploadFile(file: File, qiniuOps: QiNiuConfig, options?: {
       fname: key,
       customVars: {},
     }
+    // TODO：限制上传文件大小，超过自动压缩等
     // 测试逻辑
     if (import.meta.env.VITE_APP_FAKE_UPLOAD) {
       let i = 0

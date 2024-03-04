@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { copyRes, formatDate } from '../utils/stringUtil';
+import { copyRes, formatDate, formatSize } from '../utils/stringUtil';
 import { Picture } from '@element-plus/icons-vue'
 import { useImageStore } from '@/store'
 import { computed } from 'vue';
@@ -25,7 +25,8 @@ const checkInfo = (image: IImage) => {
       <ul>
         <li>图片名：${image.name}</li>  
         <li>链接：<a target="_blank" href=${image.url}>${image.url}</a></li>  
-        <li>上传时间：${image.date && formatDate(image.date)}</li>  
+        <li>上传时间：${image.date && formatDate(image.date)}</li>
+        <li>大小：${image.size ? formatSize(image.size) : '未知'}</li>  
       </ul>
       </div>`
   })
@@ -55,6 +56,7 @@ const showImage = computed(() => {
             </a>
           </span>
           <span style="width: 160px;" class="right">
+            <el-button v-if="image.size" type="warning" link>{{ formatSize(image.size) }}</el-button>
             <el-button type="primary" link @click="checkInfo(image)">🔍</el-button>
             <el-button type="primary" link @click="copyAddress(image.url)">url</el-button>
             <el-button type="success" link @click="copyMdAddress(image.url)">markdown</el-button>
