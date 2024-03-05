@@ -2,10 +2,11 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { computed, ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
-import { uploadFile } from '../utils/qiniu'
+import { compressImage, uploadFile } from '../utils/qiniu'
 import { useFocus } from '@vueuse/core';
 import { useConfigStore, useImageStore } from '@/store'
 import { storeToRefs } from 'pinia';
+import { formatSize } from '@/utils/stringUtil';
 
 const imageStore = useImageStore()
 const configStore = useConfigStore()
@@ -23,7 +24,7 @@ const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
   })
 }
 
-watch(files, () => {
+watch(files, async () => {
   for (const file of files.value) {
     // 上传
     if (file.status === 'ready') {
@@ -32,7 +33,11 @@ watch(files, () => {
       if (!file.raw) {
         continue
       }
-
+      compressImage(file.raw,{
+        noCompressIfLarger: true
+      }).then(v=>{
+        console.log(v.dist, formatSize(v.dist.size));
+      })
       uploadFile(file.raw, qiniu.value, {
         process(percent) {
           file.percentage = percent

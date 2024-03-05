@@ -3,7 +3,7 @@ import { useConfigStore } from '@/store';
 import { formatDate } from '@/utils/stringUtil';
 import { Key, Refresh } from '@element-plus/icons-vue';
 import { useIntervalFn, useWindowSize } from '@vueuse/core';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox, ElButton } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 const store = useConfigStore()
@@ -22,6 +22,9 @@ useIntervalFn(() => {
     }
 }, 500)
 
+const handleGetToken = () => {
+  window.open('https://github.com/ATQQ/image-bed-qiniu/tree/master/packages/client#%E7%94%9F%E6%88%90token')
+}
 onMounted(() => {
     refreshDDL()
 })
@@ -74,7 +77,7 @@ const isFullScreen = computed(() => width.value < 768)
     </el-icon>
     <el-dialog v-model="dialogVisible" title="token信息" :fullscreen="isFullScreen">
         <p v-if="isExpired">
-            token 已经过期
+            token 已经过期 <el-button type="primary" link @click="handleGetToken"> 获取方式？</el-button>
         </p>
         <p v-else>
             有效期至：{{ expiredTime }}，剩余时间 {{ countDown }}

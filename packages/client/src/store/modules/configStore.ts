@@ -6,6 +6,7 @@ export interface QiNiuConfig {
   scope: string
   prefix: string
   domain: string
+  compressImage?: any
   date: number
   config: {
     useCdnDomain: boolean
@@ -20,11 +21,12 @@ const configStore = defineStore('configStore', {
       token: '',
       date: 0,
       domain: '',
-      // TODO：自定义扩展
+      // 自定义扩展
       config: {
         useCdnDomain: true,
       },
     } as QiNiuConfig,
+    warningTimer: null as any,
   }),
   actions: {
     parseQiniuToken(token?: string) {
@@ -37,7 +39,13 @@ const configStore = defineStore('configStore', {
         }
       }
       catch (err: any) {
-        ElMessage.error('token 有误，解析失败')
+        if (this.warningTimer) {
+          return
+        }
+        this.warningTimer = setTimeout(() => {
+          this.warningTimer = null
+        }, 3000)
+        ElMessage.error('token 不正确，请点击右上角 🔑 重新设置')
       }
     },
   },

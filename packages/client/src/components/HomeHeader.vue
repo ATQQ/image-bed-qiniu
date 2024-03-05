@@ -9,7 +9,7 @@ import ConfigPanel from './ConfigPanel.vue';
         </div>
         <span class="right">
             <ConfigPanel />
-            <a href="https://github.com/ATQQ/image-bed-qiniu/tree/master/packages/client" target="_blank" noreferrer noopener>
+            <a href="https://github.com/ATQQ/image-bed-qiniu/tree/master/packages/client#-%E4%B8%83%E7%89%9B%E4%BA%91oss%E5%9B%BE%E5%BA%8A-" target="_blank" noreferrer noopener>
                 GitHub
             </a>
         </span>
