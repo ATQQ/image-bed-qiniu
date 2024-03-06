@@ -23,7 +23,8 @@ export function useIsMobile() {
   })
 }
 
+const defaultUploadConfig = { autoCopy: true, copyType: 'markdown', pageSize: 20, compressImage: true, compressPreview: true }
 export function useUploadConfig() {
-  const cacheConfig = useLocalStorage('uploadConfig', { autoCopy: true, copyType: 'markdown', pageSize: 20 })
+  const cacheConfig = useLocalStorage('uploadConfig', defaultUploadConfig)
   return cacheConfig
 }

@@ -7,6 +7,7 @@ import { useFocus } from '@vueuse/core';
 import { useConfigStore, useImageStore } from '@/store'
 import { storeToRefs } from 'pinia';
 import { formatSize } from '@/utils/stringUtil';
+import { useUploadConfig } from '@/composables';
 
 const imageStore = useImageStore()
 const configStore = useConfigStore()
@@ -23,6 +24,7 @@ const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
     return ok
   })
 }
+const cacheConfig = useUploadConfig()
 
 watch(files, async () => {
   for (const file of files.value) {
@@ -33,11 +35,16 @@ watch(files, async () => {
       if (!file.raw) {
         continue
       }
-      compressImage(file.raw,{
-        noCompressIfLarger: true
-      }).then(v=>{
-        console.log(v.dist, formatSize(v.dist.size));
-      })
+      if (cacheConfig.value.compressImage) {
+        // 采取自动压缩策略（TODO: 未来开放自定义调整）
+        compressImage(file.raw, {
+          noCompressIfLarger: true,
+          quality: 0.5
+        }).then(v => {
+          console.log('origin', formatSize(file.raw!.size), 'result', formatSize(v.dist.size));
+        })
+      }
+
       uploadFile(file.raw, qiniu.value, {
         process(percent) {
           file.percentage = percent
@@ -123,6 +130,7 @@ watch($pasteArea, () => {
 const { focused } = useFocus($pasteArea)
 const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '你也可以点击此处，然后粘贴你要上传的图片')
 </script>
+
 <template>
   <div class="upload-wrapper">
     <el-upload accept="image/*" v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple
@@ -140,6 +148,7 @@ const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '�
     </el-upload>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .upload-wrapper {
   position: relative;

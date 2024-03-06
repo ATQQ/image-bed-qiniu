@@ -1,5 +1,4 @@
 import * as qiniu from 'qiniu-js'
-import type { CompressOptions } from 'qiniu-js/esm/utils/compress'
 import { getFileMd5Hash } from './stringUtil'
 import type { QiNiuConfig } from '@/store/modules/configStore'
 
@@ -50,8 +49,31 @@ async function generateNewFileKey(file: File, prefix = 'mdImg', scope = 'sugar')
   return `${prefix}/${scope}/${md5}`
 }
 
+interface CompressOptions {
+  /**
+   * 压缩质量
+   */
+  quality?: number
+  /**
+   * 压缩后更大是否使用原图
+   */
+  noCompressIfLarger?: boolean
+  /**
+   * 压缩后的新宽度
+   */
+  width?: number
+  /**
+   * 压缩后新高度
+   */
+  height?: number
+}
+
 async function compressImage(file: File, ops: CompressOptions) {
-  return qiniu.compressImage(file, ops)
+  const { type, size } = file
+  // 根据类型选择不同的压缩工具
+  if (type === 'image/png') {
+    // window.UPNG
+  }
 }
 export {
   uploadFile,

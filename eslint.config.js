@@ -6,6 +6,7 @@ export default antfu({
 }, {
   ignores: [
     '.github/workflows/client.yml',
+    'packages/client/public/UPNG.js',
   ],
 }, {
   rules: {
