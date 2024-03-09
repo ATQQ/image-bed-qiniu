@@ -2,11 +2,12 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { computed, ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
-import { compressImage, uploadFile } from '../utils/qiniu'
+import { uploadFile } from '../utils/qiniu'
 import { useFocus } from '@vueuse/core';
 import { useConfigStore, useImageStore } from '@/store'
 import { storeToRefs } from 'pinia';
-import { formatSize } from '@/utils/stringUtil';
+import { useUploadConfig } from '@/composables';
+import { compressImage } from '@/utils/file';
 
 const imageStore = useImageStore()
 const configStore = useConfigStore()
@@ -23,6 +24,7 @@ const handleChange: UploadProps['onChange'] = (_, uploadFiles) => {
     return ok
   })
 }
+const cacheConfig = useUploadConfig()
 
 watch(files, async () => {
   for (const file of files.value) {
@@ -33,12 +35,14 @@ watch(files, async () => {
       if (!file.raw) {
         continue
       }
-      compressImage(file.raw,{
-        noCompressIfLarger: true
-      }).then(v=>{
-        console.log(v.dist, formatSize(v.dist.size));
-      })
-      uploadFile(file.raw, qiniu.value, {
+      let fileRaw = file.raw
+      if (cacheConfig.value.compressImage) {
+        // TODO: 未来开放自定义调整
+        // 采取自动压缩策略
+        fileRaw = await compressImage(file.raw) as any
+      }
+
+      uploadFile(fileRaw, qiniu.value, {
         process(percent) {
           file.percentage = percent
           if (percent === 100) {
@@ -54,8 +58,9 @@ watch(files, async () => {
         imageStore.addImage({
           url: v,
           name: file.name || 'image',
-          file: file.raw,
-          size: file.raw?.size || 0,
+          file: fileRaw,
+          size: fileRaw?.size || 0,
+          originSize: fileRaw === file.raw? 0 : file.raw?.size,
         })
       }).catch(err => {
         ElMessage.error(err)
@@ -123,6 +128,7 @@ watch($pasteArea, () => {
 const { focused } = useFocus($pasteArea)
 const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '你也可以点击此处，然后粘贴你要上传的图片')
 </script>
+
 <template>
   <div class="upload-wrapper">
     <el-upload accept="image/*" v-model:file-list="files" ref="uploadRef" :on-change="handleChange" drag multiple
@@ -140,6 +146,7 @@ const pasteText = computed(() => focused.value ? '现在你可以粘贴了' : '�
     </el-upload>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .upload-wrapper {
   position: relative;

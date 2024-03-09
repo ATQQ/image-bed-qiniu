@@ -1,5 +1,4 @@
 import * as qiniu from 'qiniu-js'
-import type { CompressOptions } from 'qiniu-js/esm/utils/compress'
 import { getFileMd5Hash } from './stringUtil'
 import type { QiNiuConfig } from '@/store/modules/configStore'
 
@@ -50,11 +49,7 @@ async function generateNewFileKey(file: File, prefix = 'mdImg', scope = 'sugar')
   return `${prefix}/${scope}/${md5}`
 }
 
-async function compressImage(file: File, ops: CompressOptions) {
-  return qiniu.compressImage(file, ops)
-}
 export {
   uploadFile,
   generateNewFileKey,
-  compressImage,
 }

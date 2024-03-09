@@ -1,6 +1,13 @@
 import { defineStore } from 'pinia'
 
-export interface IImage { url: string, name: string, file?: File, date?: number, size: number }
+export interface IImage {
+  url: string
+  name: string
+  file?: File
+  date?: number
+  size: number
+  originSize?: number
+}
 
 const imgStore = defineStore('imgStore', {
   state: () => ({
