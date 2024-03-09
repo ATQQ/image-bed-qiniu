@@ -2,12 +2,12 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { computed, ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
-import { compressImage, uploadFile } from '../utils/qiniu'
+import { uploadFile } from '../utils/qiniu'
 import { useFocus } from '@vueuse/core';
 import { useConfigStore, useImageStore } from '@/store'
 import { storeToRefs } from 'pinia';
-import { formatSize } from '@/utils/stringUtil';
 import { useUploadConfig } from '@/composables';
+import { compressImage } from '@/utils/file';
 
 const imageStore = useImageStore()
 const configStore = useConfigStore()
@@ -35,17 +35,14 @@ watch(files, async () => {
       if (!file.raw) {
         continue
       }
+      let fileRaw = file.raw
       if (cacheConfig.value.compressImage) {
-        // 采取自动压缩策略（TODO: 未来开放自定义调整）
-        compressImage(file.raw, {
-          noCompressIfLarger: true,
-          quality: 0.5
-        }).then(v => {
-          console.log('origin', formatSize(file.raw!.size), 'result', formatSize(v.dist.size));
-        })
+        // TODO: 未来开放自定义调整
+        // 采取自动压缩策略
+        fileRaw = await compressImage(file.raw) as any
       }
 
-      uploadFile(file.raw, qiniu.value, {
+      uploadFile(fileRaw, qiniu.value, {
         process(percent) {
           file.percentage = percent
           if (percent === 100) {
@@ -61,8 +58,9 @@ watch(files, async () => {
         imageStore.addImage({
           url: v,
           name: file.name || 'image',
-          file: file.raw,
-          size: file.raw?.size || 0,
+          file: fileRaw,
+          size: fileRaw?.size || 0,
+          originSize: fileRaw === file.raw? 0 : file.raw?.size,
         })
       }).catch(err => {
         ElMessage.error(err)

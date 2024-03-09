@@ -19,7 +19,7 @@ watch(() => success.value.length, () => {
 <template>
     <div class="tool-wrapper">
         <span class="autoCopy">
-            <el-switch v-model="cacheConfig.autoCopy" inline-prompt active-text="自动复制" inactive-text="关闭自动复制" />
+            <el-switch v-model="cacheConfig.autoCopy" inline-prompt active-text="自动复制" inactive-text="自动复制" />
             <el-select style="width: 100px;" v-if="cacheConfig.autoCopy" v-model="cacheConfig.copyType"
                 placeholder="选择复制类型" size="small">
                 <el-option label="链接" value="url" />
@@ -30,8 +30,8 @@ watch(() => success.value.length, () => {
             </el-select>
         </span>
         <span class="compress">
-            <el-switch v-model="cacheConfig.compressImage" inline-prompt active-text="压缩" inactive-text="关闭压缩" />
-            <el-switch v-if="cacheConfig.compressImage" class="preview-switch" v-model="cacheConfig.compressPreview" inline-prompt active-text="预览" inactive-text="关闭预览" />
+            <el-switch v-model="cacheConfig.compressImage" inline-prompt active-text="压缩" inactive-text="压缩" />
+            <!-- <el-switch v-if="cacheConfig.compressImage" class="preview-switch" v-model="cacheConfig.compressPreview" inline-prompt active-text="预览" inactive-text="关闭预览" /> -->
         </span>
     </div>
 </template>

@@ -27,6 +27,7 @@ const checkInfo = (image: IImage) => {
         <li>链接：<a target="_blank" href=${image.url}>${image.url}</a></li>  
         <li>上传时间：${image.date && formatDate(image.date)}</li>
         <li>大小：${image.size ? formatSize(image.size) : '未知'}</li>  
+        ${image.originSize ? `<li>压缩前大小：${formatSize(image.originSize)}</li>` : ''}
       </ul>
       </div>`
   })
@@ -56,7 +57,8 @@ const showImage = computed(() => {
             </a>
           </span>
           <span style="width: 160px;" class="right">
-            <el-button v-if="image.size" type="warning" link>{{ formatSize(image.size) }}</el-button>
+            <el-button v-if="image.size" :type="image.originSize ? 'success' : 'warning'" link>{{ formatSize(image.size)
+              }}</el-button>
             <el-button type="primary" link @click="checkInfo(image)">🔍</el-button>
             <el-button type="primary" link @click="copyAddress(image.url)">url</el-button>
             <el-button type="success" link @click="copyMdAddress(image.url)">markdown</el-button>
@@ -85,7 +87,7 @@ ul.el-upload-list {
   display: flex;
   justify-content: space-between;
 
-  .left{
+  .left {
     flex: 1;
   }
 
@@ -127,4 +129,5 @@ ul.el-upload-list {
   li {
     word-break: break-all;
   }
-}</style>
+}
+</style>
