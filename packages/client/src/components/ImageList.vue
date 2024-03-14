@@ -7,6 +7,7 @@ import { ElMessageBox } from 'element-plus'
 import { IImage } from '@/store/modules/imageStore'
 import { ref } from 'vue'
 import { useUploadConfig } from '@/composables';
+import { calculateCompressionPercentage } from '@/utils/file';
 const imageStore = useImageStore()
 const copyAddress = (url: string) => {
   copyRes(url)
@@ -28,6 +29,7 @@ const checkInfo = (image: IImage) => {
         <li>上传时间：${image.date && formatDate(image.date)}</li>
         <li>大小：${image.size ? formatSize(image.size) : '未知'}</li>  
         ${image.originSize ? `<li>压缩前大小：${formatSize(image.originSize)}</li>` : ''}
+        ${image.originSize ? `<li>压缩率：${calculateCompressionPercentage(image.originSize, image.size)}%</li>` : ''}
       </ul>
       </div>`
   })
@@ -57,11 +59,12 @@ const showImage = computed(() => {
             </a>
           </span>
           <span style="width: 160px;" class="right">
-            <el-button v-if="image.size" :type="image.originSize ? 'success' : 'warning'" link>{{ formatSize(image.size)
-              }}</el-button>
-            <el-button type="primary" link @click="checkInfo(image)">🔍</el-button>
-            <el-button type="primary" link @click="copyAddress(image.url)">url</el-button>
-            <el-button type="success" link @click="copyMdAddress(image.url)">markdown</el-button>
+            <el-button v-if="image.size" :type="image.originSize ? 'success' : 'warning'" link>
+              {{ formatSize(image.size) }}
+            </el-button>
+            <el-button type="primary" link @click="checkInfo(image)" title="查看图片信息">🔍</el-button>
+            <el-button type="primary" link @click="copyAddress(image.url)" title="复制图片地址">url</el-button>
+            <el-button type="success" link @click="copyMdAddress(image.url)" title="复制markdown格式图片地址">md</el-button>
           </span>
         </div>
       </div>

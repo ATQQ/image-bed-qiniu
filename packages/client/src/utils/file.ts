@@ -45,6 +45,17 @@ async function compressImage(file: File, ops: CompressOptions = {}) {
   return file.size > newFile.size ? newFile : file
 }
 
+/**
+ * 计算压缩比例
+ */
+function calculateCompressionPercentage(originalSize: number, compressedSize: number) {
+  if (originalSize === 0) {
+    return 0
+  }
+  const percentageDecreased = ((originalSize - compressedSize) / originalSize) * 100
+  return percentageDecreased.toFixed(2) // Returns the percentage with 2 decimal places
+}
+
 function getBlobArrayBuffer(file: Blob): Promise<ArrayBuffer> {
   return file.arrayBuffer()
 }
@@ -91,4 +102,5 @@ function convertQualityToBit(quality: number): number {
 export {
   compressImage,
   getImageDimensions,
+  calculateCompressionPercentage,
 }
