@@ -23,7 +23,7 @@ interface CompressOptions {
   height?: number
 }
 async function compressImage(file: File, ops: CompressOptions = {}) {
-  const { width, height, quality = 80, noCompressIfLarger } = ops
+  const { width, height, quality = 80, noCompressIfLarger = true } = ops
   const isPng = await isPNG(file)
   let newFile: File | null = null
   if (isPng) {

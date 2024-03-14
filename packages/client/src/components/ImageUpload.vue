@@ -60,7 +60,7 @@ watch(files, async () => {
           name: file.name || 'image',
           file: fileRaw,
           size: fileRaw?.size || 0,
-          originSize: fileRaw === file.raw? 0 : file.raw?.size,
+          originSize: fileRaw === file.raw ? 0 : file.raw?.size,
         })
       }).catch(err => {
         ElMessage.error(err)
