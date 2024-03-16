@@ -1,8 +1,9 @@
 <script lang="ts" setup>
+import { useIsExpired } from '@/composables';
 import { useConfigStore } from '@/store';
 import { formatDate } from '@/utils/stringUtil';
 import { Key, Refresh } from '@element-plus/icons-vue';
-import { useIntervalFn, useWindowSize } from '@vueuse/core';
+import { useWindowSize } from '@vueuse/core';
 import { ElMessage, ElMessageBox, ElButton } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
@@ -11,19 +12,10 @@ const { qiniu } = storeToRefs(store)
 const dialogVisible = ref(false)
 const expiredTime = ref('')
 const countDown = ref('')
-const isExpired = ref(false)
-
-useIntervalFn(() => {
-    isExpired.value = qiniu.value.date <= Date.now()
-    if(isExpired.value){
-        // 过期了，尝试自动取默认的token
-        localStorage.removeItem('qiniu-token')
-        store.parseQiniuToken()
-    }
-}, 500)
+const isExpired = useIsExpired()
 
 const handleGetToken = () => {
-  window.open('https://github.com/ATQQ/image-bed-qiniu/tree/master/packages/client#%E7%94%9F%E6%88%90token')
+    window.open('https://github.com/ATQQ/image-bed-qiniu/tree/master/packages/client#%E7%94%9F%E6%88%90token')
 }
 onMounted(() => {
     refreshDDL()

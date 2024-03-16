@@ -1,5 +1,7 @@
-import { computed } from 'vue'
-import { useLocalStorage, useWindowSize } from '@vueuse/core'
+import { computed, ref } from 'vue'
+import { useIntervalFn, useLocalStorage, useWindowSize } from '@vueuse/core'
+import { storeToRefs } from 'pinia'
+import { useConfigStore } from '@/store'
 export function useIsMobile() {
   // 使用正则表达式检查userAgent字符串是否匹配移动设备
   const mobileRegex
@@ -27,4 +29,20 @@ const defaultUploadConfig = { autoCopy: true, copyType: 'markdown', pageSize: 20
 export function useUploadConfig() {
   const cacheConfig = useLocalStorage('uploadConfig', defaultUploadConfig)
   return cacheConfig
+}
+
+export function useIsExpired() {
+  const store = useConfigStore()
+  const { qiniu } = storeToRefs(store)
+  const isExpired = ref(qiniu.value.date <= Date.now())
+
+  useIntervalFn(() => {
+    isExpired.value = qiniu.value.date <= Date.now()
+    if (isExpired.value) {
+      // 过期了，尝试自动取默认的token
+      localStorage.removeItem('qiniu-token')
+      store.parseQiniuToken()
+    }
+  }, 500)
+  return isExpired
 }

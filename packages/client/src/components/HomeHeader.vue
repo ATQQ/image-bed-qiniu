@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import { useIsExpired } from '@/composables';
 import ConfigPanel from './ConfigPanel.vue';
+const isExpired = useIsExpired()
+import { ElAlert } from 'element-plus';
 </script>
 <template>
     <header>
@@ -14,6 +17,7 @@ import ConfigPanel from './ConfigPanel.vue';
             </a>
         </span>
     </header>
+    <el-alert class="expired" center v-if="isExpired" title="token 已经过期，请点击右上角 🔑 更新" type="error" show-icon />
 </template>
 <style scoped lang="scss">
 header {
@@ -38,5 +42,10 @@ header {
         color: var(--el-text-color-regular);
         text-decoration: none;
     }
+}
+
+.expired{
+    max-width: 400px;
+    margin: 0 auto;
 }
 </style>
