@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { copyRes, formatDate, formatSize } from '../utils/stringUtil';
+import { copyRes, formatDate } from '../utils/stringUtil';
 import { Picture } from '@element-plus/icons-vue'
 import { useImageStore } from '@/store'
 import { computed } from 'vue';
@@ -7,7 +7,7 @@ import { ElMessageBox } from 'element-plus'
 import { IImage } from '@/store/modules/imageStore'
 import { ref } from 'vue'
 import { useUploadConfig } from '@/composables';
-import { calculateCompressionPercentage } from '@/utils/file';
+import { calculateCompressionPercentage, formatSize } from '@/utils';
 const imageStore = useImageStore()
 const copyAddress = (url: string) => {
   copyRes(url)

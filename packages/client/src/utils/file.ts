@@ -1,37 +1,23 @@
 // @ts-expect-error
 import UPNG from 'upng-js'
-interface CompressOptions {
-  /**
-   * 压缩质量（0-100）
-   * @default 80
-   */
-  quality?: number
-  /**
-   * 压缩后更大是否使用原图
-   * @default true
-   */
-  noCompressIfLarger?: boolean
-  /**
-   * 压缩后的新宽度
-   * @default 原尺寸
-   */
-  width?: number
-  /**
-   * 压缩后新高度
-   * @default 原尺寸
-   */
-  height?: number
-}
+import { compressJPGImage, isJPG } from './index'
+import type { CompressOptions } from '@/types'
+
 async function compressImage(file: File, ops: CompressOptions = {}) {
   const { width, height, quality = 80, noCompressIfLarger = true } = ops
   const isPng = await isPNG(file)
-  let newFile: File | null = null
+  const isJpg = await isJPG(file)
+
+  let newFile: Blob | null = null
   if (isPng) {
     const arrayBuffer = await getBlobArrayBuffer(file)
     const decoded = UPNG.decode(arrayBuffer)
     const rgba8 = UPNG.toRGBA8(decoded)
     const compressed = UPNG.encode(rgba8, width || decoded.width, height || decoded.height, convertQualityToBit(quality))
     newFile = new File([compressed], file.name, { type: 'image/png' })
+  }
+  if (isJpg) {
+    newFile = await compressJPGImage(file, 'browser-image-compression', ops)
   }
 
   if (!newFile) {
@@ -43,17 +29,6 @@ async function compressImage(file: File, ops: CompressOptions = {}) {
   }
 
   return file.size > newFile.size ? newFile : file
-}
-
-/**
- * 计算压缩比例
- */
-function calculateCompressionPercentage(originalSize: number, compressedSize: number) {
-  if (originalSize === 0) {
-    return 0
-  }
-  const percentageDecreased = ((originalSize - compressedSize) / originalSize) * 100
-  return percentageDecreased.toFixed(2) // Returns the percentage with 2 decimal places
 }
 
 function getBlobArrayBuffer(file: Blob): Promise<ArrayBuffer> {
@@ -102,5 +77,4 @@ function convertQualityToBit(quality: number): number {
 export {
   compressImage,
   getImageDimensions,
-  calculateCompressionPercentage,
 }
