@@ -30,7 +30,7 @@
     "prettier": "^3.2.4",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.3.3",
-    "vite": "^2.9.12"
+    "vite": "^2.9.17"
   },
   "simple-git-hooks": {
     "pre-commit": "pnpm lint-staged"
