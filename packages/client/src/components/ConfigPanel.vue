@@ -93,7 +93,6 @@ const isFullScreen = computed(() => width.value < 768)
 
 <style lang="scss" scoped>
 i {
-    margin-right: 10px;
     cursor: pointer;
 }
 
