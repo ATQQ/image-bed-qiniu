@@ -1,4 +1,4 @@
-#!/usr/bin/env zx
+import { $ } from 'bun'
 
 // user config
 const originName = 'imgbed'
