@@ -9,6 +9,7 @@
   "main": "token.js",
   "scripts": {
     "generate": "node ./token.js",
+    "generate:upyun": "node ./upyun-token.js",
     "generare:copy": "copy=true node ./token.js"
   },
   "dependencies": {
