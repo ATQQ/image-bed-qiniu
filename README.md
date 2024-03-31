@@ -1,8 +1,10 @@
-<h1 align="center"> 七牛云OSS图床 | monorepo </h1>
+<h1 align="center"> OSS图床 | monorepo </h1>
 
 <p align="center"><img width="160px" src="./packages/client/public/favicon.ico"/></p>
 
-<p align="center">基于<a target="_blank" href="https://www.qiniu.com/products/kodo">七牛云对象存储服务</a>搭建的图床应用，<strong>前端纯静态，无需后端</strong></p>
+<p align="center">基于 对象存储服务（OSS）搭建的图床应用，<strong>前端纯静态，无需后端</strong></p>
+
+<p align="center">支持 <a target="_blank" href="https://www.qiniu.com/products/kodo">七牛云</a> | <a target="_blank" href="https://www.upyun.com/products/file-storage">又拍云</a></p>
 
 <p align="center">
 <a href="https://atqq.github.io/image-bed-qiniu/" target="_blank">GitHub Pages Demo</a> |
