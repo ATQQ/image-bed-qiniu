@@ -70,8 +70,8 @@ importers:
         specifier: ^10.9.0
         version: 10.9.0(vue@3.4.21)
       axios:
-        specifier: ^0.27.2
-        version: 0.27.2
+        specifier: ^0.28.0
+        version: 0.28.0
       browser-image-compression:
         specifier: ^2.0.2
         version: 2.0.2
@@ -1837,11 +1837,12 @@ packages:
       - debug
     dev: false
 
-  /axios@0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+  /axios@0.28.0:
+    resolution: {integrity: sha512-Tu7NYoGY4Yoc7I+Npf9HhUMtEEpV7ZiLH9yndTCoNhcpBH0kwcvFbzYN9/u5QKI5A6uefjsNNWaz5olJVYS62Q==}
     dependencies:
       follow-redirects: 1.15.3
       form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
