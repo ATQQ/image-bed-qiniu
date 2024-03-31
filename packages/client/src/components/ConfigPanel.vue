@@ -8,7 +8,7 @@ import { ElMessage, ElMessageBox, ElButton } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 const store = useConfigStore()
-const { qiniu } = storeToRefs(store)
+const { config } = storeToRefs(store)
 const dialogVisible = ref(false)
 const expiredTime = ref('')
 const countDown = ref('')
@@ -21,9 +21,9 @@ onMounted(() => {
     refreshDDL()
 })
 function refreshDDL() {
-    expiredTime.value = formatDate(qiniu.value.date, 'yyyy-MM-dd')
+    expiredTime.value = formatDate(config.value.date, 'yyyy-MM-dd')
     const refreshWait = () => {
-        let wait = ((qiniu.value.date - Date.now()) / 1000) >> 0
+        let wait = ((config.value.date - Date.now()) / 1000) >> 0
         const day = (wait / (24 * 60 * 60)) >> 0
         wait -= day * 24 * 60 * 60
         const hour = (wait / (60 * 60)) >> 0
@@ -39,7 +39,7 @@ const handleCheckConfig = () => {
 }
 
 const cfgStr = computed(() => {
-    return `${JSON.stringify(qiniu.value, (key, value) => {
+    return `${JSON.stringify(config.value, (key, value) => {
         if (key === 'token') {
             return
         }
@@ -54,7 +54,7 @@ const handleUpdateToken = () => {
         if (!v.value?.trim()) {
             return
         }
-        store.parseQiniuToken(v.value)
+        store.parseToken(v.value)
     }).catch(() => {
         ElMessage.info('取消')
     })

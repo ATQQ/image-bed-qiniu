@@ -33,15 +33,15 @@ export function useUploadConfig() {
 
 export function useIsExpired() {
   const store = useConfigStore()
-  const { qiniu } = storeToRefs(store)
-  const isExpired = ref(qiniu.value.date <= Date.now())
+  const { config } = storeToRefs(store)
+  const isExpired = ref(config.value.date <= Date.now())
 
   useIntervalFn(() => {
-    isExpired.value = qiniu.value.date <= Date.now()
+    isExpired.value = config.value.date <= Date.now()
     if (isExpired.value) {
       // 过期了，尝试自动取默认的token
-      localStorage.removeItem('qiniu-token')
-      store.parseQiniuToken()
+      localStorage.removeItem('upload-token')
+      store.parseToken()
     }
   }, 500)
   return isExpired
