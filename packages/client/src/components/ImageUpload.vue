@@ -2,7 +2,8 @@
 import { UploadFilled } from '@element-plus/icons-vue'
 import { computed, ref, watch } from 'vue';
 import { ElMessage, type UploadInstance, type UploadProps, type UploadUserFile } from 'element-plus'
-import { uploadFile } from '../utils/qiniu'
+import { uploadFile as qiniuUploadFile } from '../utils/qiniu'
+import { uploadFile as upyunUploadFile } from '@/utils/upyun';
 import { useFocus } from '@vueuse/core';
 import { useConfigStore, useImageStore } from '@/store'
 import { storeToRefs } from 'pinia';
@@ -11,7 +12,7 @@ import { compressImage } from '@/utils/file';
 
 const imageStore = useImageStore()
 const configStore = useConfigStore()
-const { qiniu } = storeToRefs(configStore)
+const { qiniu, upyun, config } = storeToRefs(configStore)
 
 const uploadRef = ref<UploadInstance>()
 const files = ref<UploadUserFile[]>([])
@@ -42,14 +43,17 @@ watch(files, async () => {
         fileRaw = await compressImage(file.raw) as any
       }
 
-      uploadFile(fileRaw, qiniu.value, {
-        process(percent) {
-          file.percentage = percent
-          if (percent === 100) {
-            file.status = 'success'
-          }
-        },
-      }).then(v => {
+      const p = config.value?.type === 'upyun' ?
+        upyunUploadFile(fileRaw, upyun.value) :
+        qiniuUploadFile(fileRaw, qiniu.value, {
+          process(percent) {
+            file.percentage = percent
+            if (percent === 100) {
+              file.status = 'success'
+            }
+          },
+        })
+      p.then(v => {
         file.status = 'success'
         // 列表里移除已经删除的
         files.value.splice(files.value.findIndex(f => f === file), 1)

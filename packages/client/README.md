@@ -1,8 +1,10 @@
-<h1 align="center"> 七牛云OSS图床 </h1>
+<h1 align="center"> 基于 OSS（对象存储库） 图床 </h1>
 
 <p align="center"><img width="160px" src="./public/favicon.ico"/></p>
 
-<p align="center">基于<a target="_blank" href="https://www.qiniu.com/products/kodo">七牛云对象存储服务</a>搭建的图床应用，<strong>前端纯静态，无需后端</strong></p>
+<p align="center">基于对象存储服务搭建的图床应用，<strong>前端纯静态，无需后端</strong></p>
+
+<p align="center">支持 <a target="_blank" href="https://www.qiniu.com/products/kodo">七牛云</a> | <a target="_blank" href="https://www.upyun.com/products/file-storage">又拍云</a></p>
 
 <p align="center">
 <a href="https://atqq.github.io/image-bed-qiniu/" target="_blank">GitHub Pages Demo</a> |
@@ -27,6 +29,7 @@ pnpm preview
 ```
 
 ### 🚧 Docker启动
+TODO：待构建镜像
 
 ## 配置token
 ### 生成token
@@ -47,14 +50,31 @@ QINIU_SCOPE=default
 
 # token有效期，默认一个月，单位秒，你可以自行设置
 # QINIU_EXPIRES=2592000
+
+# 又拍云相关配置
+UPYUN_OPERATOR=operator
+UPYUN_PASSWORD=password
+UPYUN_BUCKET=service-name
+UPYUN_DOMAIN=http://service-name.test.upcdn.net
+UPYUN_PREFIX=image
+UPYUN_SCOPE=default
+# token有效期，默认一个月，单位秒，你可以自行设置（60*60*24*30）
+# UPYUN_EXPIRES=2592000
 ```
 最后资源地址为 **`domain/prefix/scope/md5`**
 
-执行生成 token 脚本
+① 七牛云：执行生成 token 脚本
 ```sh
 npm run generate
 # 或者
 node token.js
+```
+
+② 又拍云：执行生成 token 脚本
+```sh
+npm run generate:upyun
+# 或者
+node upyun-token.js
 ```
 
 ![token-snippet](./token.png)
@@ -64,7 +84,7 @@ node token.js
 
 在 [packages/client](./../client/) 下创建`.env.local`
 ```sh
-VITE_APP_QINIU_TOKEN=你的token
+VITE_APP_UPLOAD_TOKEN=你的token
 ```
 
 启动构建项目即可

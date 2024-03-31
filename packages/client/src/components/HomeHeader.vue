@@ -8,7 +8,7 @@ import { ElAlert, ElLink } from 'element-plus';
     <header>
         <div class="left">
             <img src="../assets/logo.gif">
-            <span>七牛云 OSS 图床</span>
+            <span>纯静态 OSS 图床</span>
         </div>
         <span class="right">
             <ConfigPanel />
