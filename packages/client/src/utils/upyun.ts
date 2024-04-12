@@ -5,6 +5,7 @@ import type { UPYunConfig } from '@/store/modules/configStore'
 
 export async function uploadFile(file: File, ops: UPYunConfig) {
   const { bucket, prefix, scope, token, date, uriPrefix, domain } = ops
+
   const service = new upyun.Service(bucket)
   const client = new upyun.Client(service, () => ({
     'Authorization': token,
@@ -13,6 +14,10 @@ export async function uploadFile(file: File, ops: UPYunConfig) {
     'X-Upyun-Expire': date,
   }))
   const key = await generateNewFileKey(file, prefix, scope)
+  // 测试逻辑
+  if (import.meta.env.VITE_APP_FAKE_UPLOAD) {
+    return Promise.resolve(`${domain}/${key}`)
+  }
   const isSuccess = await client.putFile(key, file)
   return isSuccess ? Promise.resolve(`${domain}/${key}`) : Promise.reject(new Error('上传失败'))
 }
