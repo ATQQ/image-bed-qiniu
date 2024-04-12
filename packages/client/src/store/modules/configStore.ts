@@ -51,12 +51,13 @@ const configStore = defineStore('configStore', {
       try {
         // 兜底都取默认的token
         const config = JSON.parse(atob(token || import.meta.env.VITE_APP_UPLOAD_TOKEN))
-        this.parsedToken = config
         if (config?.type === 'upyun') {
           Object.assign(this.upyun, config)
+          this.parsedToken = this.upyun
         }
         else {
           Object.assign(this.qiniu, config)
+          this.parsedToken = this.qiniu
         }
         if (token) {
           localStorage.setItem('upload-token', token)
