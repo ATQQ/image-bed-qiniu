@@ -11,14 +11,31 @@ const __dirname = dirname(__filename)
 dotenv.config({ path: path.join(__dirname, '.env.local') })
 dotenv.config({ path: path.join(__dirname, '.env') })
 
-// function generateUpyunToken(operator, password, method, uriPrefix, expire) {
-//   const hmac = crypto.createHmac('sha1', Buffer.from(password, 'hex'))
-//   const data = `${method}&${uriPrefix}&${expire}`
-//   hmac.update(data)
-//   const digest = hmac.digest()
-//   const base64Encoded = digest.toString('base64')
-//   return `UPYUN ${operator}:${base64Encoded}`
-// }
+/**
+ * 生成 upyun 上传token
+ * @param {*} operator 账号
+ * @param {*} password 密码
+ * @param {*} method 方法（PUT）
+ * @param {*} uriPrefix 资源公共前缀
+ * @param {*} expire 过期时间（s）
+ * @returns 上传凭证
+ */
+function generateUpyunToken(operator, password, method, uriPrefix, expire) {
+  // 密码的md5值，秘钥
+  const secret = crypto.createHash('md5').update(password).digest('hex')
+
+  // 构造用于计算校验值的字符串
+  const value = `${method}&${uriPrefix}&${expire}`
+
+  // 使用 hmac-sha1 算法生成token
+  const token = crypto.createHmac('sha1', secret) // 使用密码的MD5值作为秘钥
+    .update(value) // 设置用于计算校验值的字符串
+    .digest() // 计算校验值
+    .toString('base64') // 转换为base64 格式
+
+  // 组合成要求的格式
+  return `UPYUN ${operator}:${token}`
+}
 function MD5(value) {
   return crypto.createHash('md5').update(value).digest('hex')
 }
@@ -41,11 +58,12 @@ const prefix = process.env.UPYUN_PREFIX
 const scope = process.env.UPYUN_SCOPE
 const method = 'PUT'
 const uriPrefix = `/${bucket}/${prefix}/${scope}`
-const expire = new Date().getTime() + 1000 * 60 * 60 * 24 * 90 // 90天的过期时间
+const expire = new Date().getTime() + (+process.env.UPYUN_EXPIRES) || 1000 * 60 * 60 * 24 * 90 // 90天的过期时间
 const domain = process.env.UPYUN_DOMAIN
 
 const envToken = btoa(JSON.stringify({
-  token: tokenSign(operator, MD5(password), method, uriPrefix, expire),
+  // token: tokenSign(operator, MD5(password), method, uriPrefix, expire),
+  token: generateUpyunToken(operator, password, method, uriPrefix, expire),
   date: expire,
   domain,
   prefix,
