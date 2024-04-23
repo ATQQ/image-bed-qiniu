@@ -58,7 +58,8 @@ const prefix = process.env.UPYUN_PREFIX
 const scope = process.env.UPYUN_SCOPE
 const method = 'PUT'
 const uriPrefix = `/${bucket}/${prefix}/${scope}`
-const expire = new Date().getTime() + (+process.env.UPYUN_EXPIRES) || 1000 * 60 * 60 * 24 * 90 // 90天的过期时间
+const expire = new Date().getTime() + (+process.env.UPYUN_EXPIRES * 1000) || 1000 * 60 * 60 * 24 * 90 // 90天的过期时间
+console.log('expire', new Date(expire).toLocaleString())
 const domain = process.env.UPYUN_DOMAIN
 
 const envToken = btoa(JSON.stringify({

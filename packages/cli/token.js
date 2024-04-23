@@ -30,6 +30,8 @@ const options = {
 const putPolicy = new qiniu.rs.PutPolicy(options)
 const uploadToken = putPolicy.uploadToken(mac)
 
+console.log('expire', new Date(Date.now() + options.expires * 1000).toLocaleString())
+
 const envToken = btoa(JSON.stringify({
   token: uploadToken,
   date: Date.now() + options.expires * 1000,
