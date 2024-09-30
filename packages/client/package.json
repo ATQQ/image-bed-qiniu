@@ -5,7 +5,7 @@
     "dev": "vite",
     "dev:test": "VITE_APP_FAKE_UPLOAD=true vite",
     "build": "vite build",
-    "build:github": "node ./../cli/token.js && vite build --base /image-bed-qiniu/",
+    "build:github": "node ./../cli/upyun-token.js && vite build --base /image-bed-qiniu/",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

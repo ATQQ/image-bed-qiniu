@@ -62,6 +62,13 @@ jobs:
           QINIU_PREFIX: ${{vars.QINIU_PREFIX}}
           QINIU_SCOPE: ${{vars.QINIU_SCOPE}}
           QINIU_EXPIRES: ${{vars.QINIU_EXPIRES}}
+          UPYUN_OPERATOR: ${{secrets.UPYUN_OPERATOR}}
+          UPYUN_PASSWORD: ${{secrets.UPYUN_PASSWORD}}
+          UPYUN_BUCKET: ${{secrets.UPYUN_BUCKET}}
+          UPYUN_DOMAIN: ${{vars.UPYUN_DOMAIN}}
+          UPYUN_PREFIX: ${{vars.UPYUN_PREFIX}}
+          UPYUN_SCOPE: ${{vars.UPYUN_SCOPE}}
+          UPYUN_EXPIRES: ${{vars.UPYUN_EXPIRES}}
         run: |
           echo ${{ github.workspace }}
           cd ./packages/client
