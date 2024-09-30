@@ -36,19 +36,19 @@ function generateUpyunToken(operator, password, method, uriPrefix, expire) {
   // 组合成要求的格式
   return `UPYUN ${operator}:${token}`
 }
-function MD5(value) {
-  return crypto.createHash('md5').update(value).digest('hex')
-}
+// function MD5(value) {
+//   return crypto.createHash('md5').update(value).digest('hex')
+// }
 
-function tokenSign(operator, secret, method, uriPrefix, expire) {
-  const value = [method, uriPrefix, expire].filter(v => !!v).join('&')
-  const auth = hmacsha1(secret, value)
-  return `UPYUN ${operator}:${auth}`
-}
+// function tokenSign(operator, secret, method, uriPrefix, expire) {
+//   const value = [method, uriPrefix, expire].filter(v => !!v).join('&')
+//   const auth = hmacsha1(secret, value)
+//   return `UPYUN ${operator}:${auth}`
+// }
 
-function hmacsha1(secret, value) {
-  return crypto.createHmac('sha1', secret).update(value, 'utf8').digest().toString('base64')
-}
+// function hmacsha1(secret, value) {
+//   return crypto.createHmac('sha1', secret).update(value, 'utf8').digest().toString('base64')
+// }
 
 // 示例参数
 const operator = process.env.UPYUN_OPERATOR
@@ -64,7 +64,7 @@ const domain = process.env.UPYUN_DOMAIN
 
 const envToken = btoa(JSON.stringify({
   // token: tokenSign(operator, MD5(password), method, uriPrefix, expire),
-  token: generateUpyunToken(operator, password, method, uriPrefix, expire),
+  token: generateUpyunToken(operator, password, method, uriPrefix, Math.round(expire / 1000)),
   date: expire,
   domain,
   prefix,

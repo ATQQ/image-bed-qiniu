@@ -45,7 +45,7 @@ const showImage = computed(() => {
 </script>
 <template>
   <!-- 链接列表 -->
-  <p class="title">历史上传记录 ↓</p>
+  <p class="title">历史上传记录 ↓（本地存储）</p>
   <ul class="el-upload-list el-upload-list--text">
     <li class="el-upload-list__item" v-for="(image, idx) in showImage" :key="idx">
       <div class="el-upload-list__item-info">

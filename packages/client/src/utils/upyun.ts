@@ -11,7 +11,7 @@ export async function uploadFile(file: File, ops: UPYunConfig) {
     'Authorization': token,
     'X-Date': new Date().toUTCString(),
     'X-Upyun-Uri-Prefix': uriPrefix,
-    'X-Upyun-Expire': date,
+    'X-Upyun-Expire': Math.round(date / 1000),
   }))
   const key = await generateNewFileKey(file, prefix, scope)
   // 测试逻辑
