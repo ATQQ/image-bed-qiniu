@@ -1,6 +1,4 @@
 import { ElMessage } from 'element-plus'
-
-// @ts-expect-error
 import SparkMD5 from 'spark-md5'
 import copy from 'clipboard-copy'
 
