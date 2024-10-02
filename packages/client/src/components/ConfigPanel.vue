@@ -5,9 +5,9 @@ import { formatDate } from '@/utils/stringUtil';
 import { generateUploadToken } from '@/utils/upyun';
 import { Key, Refresh, Setting } from '@element-plus/icons-vue';
 import { useWindowSize, useLocalStorage } from '@vueuse/core';
-import { ElMessage, ElMessageBox, ElButton, ElForm, ElFormItem, ElInput, ElCheckbox, ElDatePicker, ElTimePicker } from 'element-plus';
+import { ElMessage, ElMessageBox, ElButton, ElForm, ElFormItem, ElInput, ElCheckbox, ElDatePicker } from 'element-plus';
 import { storeToRefs } from 'pinia';
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 
 const store = useConfigStore()
 const { config } = storeToRefs(store)
@@ -23,8 +23,8 @@ onMounted(() => {
     refreshDDL()
 })
 function refreshDDL() {
-    expiredTime.value = formatDate(config.value.date, 'yyyy-MM-dd')
     const refreshWait = () => {
+        expiredTime.value = formatDate(config.value.date, 'yyyy-MM-dd')
         let wait = ((config.value.date - Date.now()) / 1000) >> 0
         const day = (wait / (24 * 60 * 60)) >> 0
         wait -= day * 24 * 60 * 60
@@ -170,7 +170,7 @@ onMounted(() => {
             token 已经过期 <el-button type="primary" link @click="handleGetToken"> 获取方式？</el-button>
         </p>
         <p v-else>
-            有效期至：{{ expiredTime }}，剩余时间 {{ countDown }}
+            <span>有效期至：{{ expiredTime }}，剩余时间</span><span>{{ countDown }}</span>
         </p>
         <p>
             <el-button v-if="isExpired" type="danger" text :icon="Refresh" @click="handleUpdateToken">点我更新</el-button>

@@ -32,7 +32,12 @@ pnpm preview
 TODO：待构建镜像
 
 ## 配置token
-### 生成token
+### 浏览器生成 token
+① 点击右上角小钥匙 🔑 图标唤起设置面板
+
+![浏览器生成 token](browser-token.png)
+
+### CLI 生成token
 访问 [cli](./../cli/) 目录，修改 `.env` 中的变量
 ```sh
 # 七牛云的 ACCESS_KEY 和 SECRET_KEY
@@ -90,6 +95,6 @@ VITE_APP_UPLOAD_TOKEN=你的token
 启动构建项目即可
 
 ### 临时配置
-token 将会存在本地
+token 将会存在本地（浏览器 LocalStorage）
 
 ![cv token](./cv-token.png)
