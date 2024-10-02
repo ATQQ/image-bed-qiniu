@@ -2,7 +2,8 @@
 import { useIsExpired } from '@/composables';
 import { useConfigStore } from '@/store';
 import { formatDate } from '@/utils/stringUtil';
-import { generateUploadToken } from '@/utils/upyun';
+import { generateUploadToken as generateUpyunToken } from '@/utils/upyun';
+import { generateUploadToken as generateQiniuToken } from '@/utils/qiniu';
 import { Key, Refresh, Setting } from '@element-plus/icons-vue';
 import { useWindowSize, useLocalStorage } from '@vueuse/core';
 import { ElMessage, ElMessageBox, ElButton, ElForm, ElFormItem, ElInput, ElCheckbox, ElDatePicker } from 'element-plus';
@@ -108,15 +109,33 @@ async function handleGenerateToken() {
     }
 
     // 生成token 并应用
-    const token = await generateUploadToken({
-        operator: form.account,
-        password: form.password,
-        service: form.bucket,
-        domain: form.domain,
-        prefix: form.prefix,
-        scope: form.scope,
-        expires: +form.expires,
-    })
+    let token = ''
+    if (form.type === 'upyun') {
+        token = await generateUpyunToken({
+            operator: form.account,
+            password: form.password,
+            service: form.bucket,
+            domain: form.domain,
+            prefix: form.prefix,
+            scope: form.scope,
+            expires: +form.expires,
+        })
+    }
+    if(form.type === 'qiniu'){
+        token = await generateQiniuToken({
+            accessKey: form.account,
+            secretKey: form.password,
+            bucket: form.bucket,
+            domain: form.domain,
+            prefix: form.prefix,
+            scope: form.scope,
+            expires: +form.expires,
+        })
+    }
+
+    if (!token) {
+        return
+    }
     store.parseToken(token)
 
     ElMessage.success('生成并应用成功！')
@@ -181,7 +200,7 @@ onMounted(() => {
             <el-form :model="form" label-width="auto" style="max-width: 600px">
                 <el-form-item label="存储服务">
                     <el-radio-group v-model="form.type">
-                        <el-radio disabled value="qiniu">七牛云</el-radio>
+                        <el-radio value="qiniu">七牛云</el-radio>
                         <el-radio value="upyun">又拍云</el-radio>
                     </el-radio-group>
                 </el-form-item>

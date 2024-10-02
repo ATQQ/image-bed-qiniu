@@ -38,6 +38,7 @@ const envToken = btoa(JSON.stringify({
   domain,
   prefix,
   scope,
+  bucket,
   //  自定义qiniu 上传补充配置
   //  config: {
 

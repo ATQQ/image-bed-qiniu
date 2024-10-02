@@ -36,3 +36,16 @@ export function uint8ArrayToHex(uint8Array: Uint8Array) {
     .map(byte => byte.toString(16).padStart(2, '0'))
     .join('')
 }
+
+export function urlsafeBase64Encode(str: string) {
+  const encoded = btoa(str)
+  return base64ToUrlSafe(encoded)
+}
+
+export function base64ToUrlSafe(v: string) {
+  return v.replace(/\//g, '_').replace(/\+/g, '-')
+}
+
+export function urlSafeToBase64(v: string) {
+  return v.replace(/_/g, '/').replace(/-/g, '+')
+}

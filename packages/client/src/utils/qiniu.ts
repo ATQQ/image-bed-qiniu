@@ -1,5 +1,6 @@
 import * as qiniu from 'qiniu-js'
 import { getFileMd5Hash } from './stringUtil'
+import { base64ToUrlSafe, computedHMAC_SHA1, urlsafeBase64Encode } from './crypto'
 import type { QiNiuConfig } from '@/store/modules/configStore'
 
 async function uploadFile(file: File, qiniuOps: QiNiuConfig, options?: {
@@ -49,7 +50,51 @@ async function generateNewFileKey(file: File, prefix = 'mdImg', scope = 'sugar')
   return `${prefix}/${scope}/${md5}`
 }
 
+async function generateUploadToken(ops: {
+  accessKey: string
+  secretKey: string
+  bucket: string
+  expires: number
+  domain: string
+  prefix: string
+  scope: string
+}) {
+  const { accessKey, secretKey, bucket, expires, domain, prefix, scope } = ops
+  const token = await generateQiniuToken(accessKey, secretKey, bucket, Math.round(expires / 1000))
+  return btoa(JSON.stringify({
+    token,
+    date: expires,
+    domain,
+    prefix,
+    scope,
+    type: 'qiniu',
+  }))
+}
+
+/**
+ *
+ * @param accessKey
+ * @param secretKey
+ * @param bucket
+ * @param expires
+ * @returns 上传凭证
+ * @doc https://developer.qiniu.com/kodo/1208/upload-token
+ * @doc https://developer.qiniu.com/kodo/1231/appendix#urlsafe-base64
+ */
+async function generateQiniuToken(accessKey: string, secretKey: string, bucket: string, expires: number) {
+  const flags = {
+    scope: bucket,
+    deadline: expires,
+  }
+  const encodedFlags = urlsafeBase64Encode(JSON.stringify(flags))
+  const encoded = await computedHMAC_SHA1(secretKey, encodedFlags)
+  const encodedSign = base64ToUrlSafe(encoded)
+  const uploadToken = `${accessKey}:${encodedSign}:${encodedFlags}`
+  return uploadToken
+}
+
 export {
   uploadFile,
   generateNewFileKey,
+  generateUploadToken,
 }
