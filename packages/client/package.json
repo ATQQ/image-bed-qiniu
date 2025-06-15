@@ -18,7 +18,7 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
     "@vueuse/core": "^10.9.0",
-    "axios": "^0.28.1",
+    "axios": "^0.30.0",
     "browser-image-compression": "^2.0.2",
     "clipboard-copy": "^4.0.1",
     "compressorjs": "^1.2.1",
