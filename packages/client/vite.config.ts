@@ -46,7 +46,7 @@ export default defineConfig({
           // 将 Element Plus 相关依赖打包在一起
           'element-plus-vendor': ['element-plus'],
           // 将其他第三方库打包在一起
-          'utils-vendor': ['axios', 'lodash-es'],
+          // 'utils-vendor': ['axios'],
         },
       },
     },
