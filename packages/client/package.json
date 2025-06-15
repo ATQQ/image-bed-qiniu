@@ -5,13 +5,15 @@
     "dev": "vite",
     "dev:test": "VITE_APP_FAKE_UPLOAD=true vite",
     "build": "vite build",
-    "build:github": "node ./../cli/upyun-token.js && vite build --base /image-bed-qiniu/",
+    "build:github": "vite build --base /image-bed-qiniu/",
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "docker:build": "bash scripts/build-local.sh",
+    "docker:push": "bash scripts/build-push.sh"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",

@@ -28,8 +28,11 @@ pnpm build
 pnpm preview
 ```
 
-### 🚧 Docker启动
-TODO：待构建镜像
+### Docker启动
+```sh
+docker run -d -p 8090:80 --restart unless-stopped --name image-bed-app sugarjl/image-bed:latest
+```
+应用将在 http://localhost:8090 可访问
 
 ## 配置token
 ### 浏览器生成 token

@@ -15,3 +15,9 @@
 * [极简纯静态v1](./packages/static-web)
 * 🚩[极简纯静态v2](./packages/client)
 * [ ] 带后端服务
+
+## Docker 镜像
+```sh
+docker run -d -p 8090:80 --restart unless-stopped --name image-bed-app sugarjl/image-bed:latest
+```
+应用将在 http://localhost:8090 可访问

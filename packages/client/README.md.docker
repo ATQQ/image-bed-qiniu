@@ -1,0 +1,50 @@
+# Docker 支持
+
+本项目支持使用 Docker 进行构建和部署。
+
+## 使用 npm 脚本构建 Docker 镜像
+
+### 本地构建
+
+```bash
+# 使用默认标签 latest
+npm run docker:build
+
+# 指定自定义标签
+npm run docker:build:tag v1.0.0
+```
+
+### 构建多平台镜像并推送到 Docker Hub
+
+```bash
+# 使用默认标签 latest
+npm run docker:push
+
+# 指定自定义标签
+npm run docker:push:tag v1.0.0
+```
+
+**注意:** 在推送镜像前，请确保已使用 `docker login` 命令登录到 Docker Hub。
+
+## 直接使用 Dockerfile
+
+你也可以直接使用项目根目录下的 Dockerfile 进行构建：
+
+```bash
+# 构建镜像
+docker build -t sugarat/image-bed:latest .
+
+# 运行容器
+docker run -d -p 8080:80 sugarat/image-bed:latest
+```
+
+## 使用预构建的 Docker 镜像
+
+你可以直接使用已经推送到 Docker Hub 的镜像：
+
+```bash
+docker pull sugarat/image-bed:latest
+docker run -d -p 8080:80 sugarat/image-bed:latest
+```
+
+然后在浏览器中访问 `http://localhost:8080` 即可。
