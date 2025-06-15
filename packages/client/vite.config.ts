@@ -38,6 +38,18 @@ export default defineConfig({
   },
   build: {
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // 将 Vue 相关库打包在一起
+          'vue-vendor': ['vue', 'vue-router', 'pinia'],
+          // 将 Element Plus 相关依赖打包在一起
+          'element-plus-vendor': ['element-plus'],
+          // 将其他第三方库打包在一起
+          'utils-vendor': ['axios', 'lodash-es'],
+        },
+      },
+    },
   },
   server: {
     port: 8080,
@@ -64,6 +76,13 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
     },
   },
 })
