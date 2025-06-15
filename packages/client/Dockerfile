@@ -13,6 +13,9 @@ RUN npm install --registry=https://registry.npmmirror.com
 # 复制项目文件
 COPY . .
 
+# 复制lock文件
+COPY scripts/package-lock.json ./
+
 # 构建应用
 RUN npm run build
 
