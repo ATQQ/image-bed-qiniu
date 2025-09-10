@@ -22,7 +22,7 @@
     "browser-image-compression": "^2.0.2",
     "clipboard-copy": "^4.0.1",
     "compressorjs": "^1.2.1",
-    "element-plus": "^2.6.3",
+    "element-plus": "^2.11.0",
     "pinia": "^2.1.7",
     "qiniu": "^7.11.1",
     "qiniu-js": "^3.4.2",
