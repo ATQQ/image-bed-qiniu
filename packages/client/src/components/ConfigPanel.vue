@@ -67,29 +67,71 @@ const isFullScreen = computed(() => width.value < 768)
 
 const settingPanel = ref(false)
 
-const form = reactive({
-    type: 'upyun',
-    account: '',
-    password: '',
-    bucket: '',
-    domain: 'https://abc.example.com',
-    prefix: 'image',
-    scope: 'default',
-    expires: 0,
-    localSave: false
+type Platform = 'qiniu' | 'upyun'
+
+function defaultForm() {
+    return {
+        account: '',
+        password: '',
+        bucket: '',
+        domain: 'https://abc.example.com',
+        prefix: 'image',
+        scope: 'default',
+        expires: 0,
+        localSave: false,
+    }
+}
+
+// 按平台分槽存储：两平台配置互不影响
+const cacheConfig = useLocalStorage('oss-config', {
+    qiniu: defaultForm(),
+    upyun: defaultForm(),
 })
 
-const cacheConfig = useLocalStorage('oss-config', {
-    type: 'upyun',
-    account: '',
-    password: '',
-    bucket: '',
-    domain: 'https://abc.example.com',
-    prefix: 'image',
-    scope: 'default',
-    expires: 0,
-    localSave: false
+// 当前正在编辑的平台
+const currentPlatform = ref<Platform>(store.activePlatform as Platform)
+
+const form = reactive<{ type: Platform } & ReturnType<typeof defaultForm>>({
+    type: currentPlatform.value,
+    ...defaultForm(),
 })
+
+// 把指定平台的缓存与 store 状态合并到 form
+function loadForm(platform: Platform) {
+    const saved = cacheConfig.value[platform] || defaultForm()
+    const storeState = store[platform] as any
+    Object.assign(form, {
+        type: platform,
+        account: saved.account || '',
+        password: saved.password || '',
+        bucket: saved.bucket || storeState.bucket || '',
+        domain: saved.domain || storeState.domain || 'https://abc.example.com',
+        prefix: saved.prefix || storeState.prefix || 'image',
+        scope: saved.scope || storeState.scope || 'default',
+        expires: saved.expires || storeState.date || 0,
+        localSave: saved.localSave ?? false,
+    })
+}
+
+// 把当前 form 保存到指定平台槽（type 以传入平台为准，避免 v-model 污染）
+function saveForm(platform: Platform) {
+    cacheConfig.value = {
+        ...cacheConfig.value,
+        [platform]: { ...form, type: platform },
+    }
+}
+
+// 切换平台：保存旧平台表单 -> 载入新平台表单 -> 切换生效 token
+function handlePlatformSwitch(newPlatform: Platform) {
+    const old = currentPlatform.value
+    if (old === newPlatform) {
+        return
+    }
+    saveForm(old)
+    loadForm(newPlatform)
+    currentPlatform.value = newPlatform
+    store.switchPlatform(newPlatform)
+}
 
 async function handleGenerateToken() {
     // 校验表单不能为空
@@ -140,7 +182,19 @@ async function handleGenerateToken() {
 
     ElMessage.success('生成并应用成功！')
 
-    if (form.account === cacheConfig.value.account && form.password === cacheConfig.value.password) {
+    const platform = currentPlatform.value
+    const saved = cacheConfig.value[platform] || defaultForm()
+    if (form.account === saved.account && form.password === saved.password) {
+        // 凭据未变化，仅同步本地保存状态
+        if (form.localSave) {
+            saveForm(platform)
+        }
+        else {
+            cacheConfig.value = {
+                ...cacheConfig.value,
+                [platform]: { ...saved, localSave: false },
+            }
+        }
         return
     }
     // 调用存储到浏览器
@@ -157,26 +211,35 @@ async function handleGenerateToken() {
 
     }
 
-    // 是否同步存储到本地中
+    // 是否同步存储到本地中（按平台分槽）
     if (form.localSave) {
-        cacheConfig.value = form
-    } else {
-        cacheConfig.value.localSave = false
+        saveForm(platform)
+    }
+    else {
+        cacheConfig.value = {
+            ...cacheConfig.value,
+            [platform]: { ...saved, localSave: false },
+        }
     }
 }
 
 
 onMounted(() => {
-    // 迁移配置
-    cacheConfig.value.type = config.value.type || 'qiniu'
-    cacheConfig.value.bucket = config.value.bucket
-    cacheConfig.value.domain = config.value.domain
-    cacheConfig.value.prefix = config.value.prefix
-    cacheConfig.value.scope = config.value.scope
-    cacheConfig.value.expires = config.value.date
+    // 迁移旧的单配置结构 -> 按平台分槽
+    const cv = cacheConfig.value as any
+    if (cv && !cv.qiniu && !cv.upyun && typeof cv.type === 'string') {
+        const oldPlatform = (cv.type === 'upyun' ? 'upyun' : 'qiniu') as Platform
+        const oldFields = { ...defaultForm(), ...cv }
+        cacheConfig.value = {
+            qiniu: oldPlatform === 'qiniu' ? oldFields : defaultForm(),
+            upyun: oldPlatform === 'upyun' ? oldFields : defaultForm(),
+        }
+    }
 
-    // 同步到视图上
-    Object.assign(form, cacheConfig.value)
+    // 载入当前激活平台的表单
+    const active = (store.activePlatform === 'upyun' ? 'upyun' : 'qiniu') as Platform
+    currentPlatform.value = active
+    loadForm(active)
 })
 </script>
 
@@ -199,7 +262,7 @@ onMounted(() => {
         <div v-show="settingPanel" class="setting-panel">
             <el-form :model="form" label-width="auto" style="max-width: 600px">
                 <el-form-item label="存储服务">
-                    <el-radio-group v-model="form.type">
+                    <el-radio-group v-model="form.type" @change="handlePlatformSwitch">
                         <el-radio value="qiniu">七牛云</el-radio>
                         <el-radio value="upyun">又拍云</el-radio>
                     </el-radio-group>

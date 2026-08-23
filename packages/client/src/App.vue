@@ -1,20 +1,12 @@
 <script setup lang="ts">
-import { watch } from 'vue';
 import HomeHeader from './components/HomeHeader.vue';
 import ImageList from './components/ImageList.vue';
 import ImageUpload from './components/ImageUpload.vue'
 import UploadTool from './components/UploadTool.vue'
 import { useConfigStore } from './store';
-import { useLocalStorage } from '@vueuse/core';
 const store = useConfigStore()
-// 默认取用户设置的token
-const uploadToken = useLocalStorage('upload-token', undefined)
-
-watch(uploadToken, (newValue) => {
-  store.parseToken(newValue)
-}, {
-  immediate: true
-})
+// 初始化：恢复各平台配置与激活平台
+store.init()
 </script>
 
 <template>

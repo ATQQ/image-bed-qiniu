@@ -38,11 +38,6 @@ export function useIsExpired() {
 
   useIntervalFn(() => {
     isExpired.value = config.value.date <= Date.now()
-    if (isExpired.value) {
-      // 过期了，尝试自动取默认的token
-      localStorage.removeItem('upload-token')
-      store.parseToken()
-    }
   }, 500)
   return isExpired
 }
